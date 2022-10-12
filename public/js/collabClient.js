@@ -499,8 +499,6 @@ const collabClient = (function(){
      */
     function addSurveyAnswer(surveyAnswer) {
         //skip computables
-        console.log("Calling 'surveyAnswer'")
-        console.log(surveyAnswer)
         send({
             type: "surveyAction",
             actionType: "add",
