@@ -259,6 +259,96 @@
                         </div>
                     </div>
                     <!-- @Roman - add custom metadata section (finish) --> 
+                    
+                    <!-- @Roman - add custom survey section (start) --> 
+                    <form onsubmit="saveSurveyAnswer(); return false;" id="surveyForm">
+                        <div class="card-body pb-0 pt-2 px-1 px-md-2">
+                            <div class="card-block pb-4">
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class="card-subtitle mb-2 text-muted">Diagnosis</h6>
+                                        <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons" role="group" onkeydown="noArrows()">
+                                            <!-- Diagnosis radio group -->
+                                            <label type="button" class="btn btn-primary">
+                                                <input type="radio" name="diagnosisRadioGroup" value="melanoma" required>
+                                                Melanoma
+                                            </label>
+                                            <label type="button" class="btn btn-primary">
+                                                <input type="radio" name="diagnosisRadioGroup" value="nevus">
+                                                Nevus
+                                            </label>
+                                            <label type="button" class="btn btn-primary"> 
+                                                <input type="radio" name="diagnosisRadioGroup" value="other">
+                                                Other
+                                            </label>
+                                        </div>
+                                    </div>                                
+                                </div>
+                            </div>
+                            <div class="card-block pb-4">
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class="card-subtitle mb-2 text-muted">Confidence</h6>
+                                        <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons" role="group" onkeydown="noArrows()">
+                                            <!-- Confidence radio group -->
+                                            <label type="button" class="btn btn-primary">
+                                                <input type="radio" name="confidenceRadioGroup" value="1" required>
+                                                1
+                                            </label>
+                                            <label type="button" class="btn btn-primary">
+                                                <input type="radio" name="confidenceRadioGroup" value="2">
+                                                2
+                                            </label>
+                                            <label type="button" class="btn btn-primary">
+                                                <input type="radio" name="confidenceRadioGroup" value="3">
+                                                3
+                                            </label>
+                                            <label type="button" class="btn btn-primary">
+                                                <input type="radio" name="confidenceRadioGroup" value="4">
+                                                4
+                                            </label><br>
+                                        </div>
+                                    </div>                                
+                                </div>
+                            </div>
+                            <div class="card-block pb-4">
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class="card-subtitle mb-2 text-muted">Problems with image quality?</h6>
+                                        <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons" role="group" onkeydown="noArrows()">
+                                            <!-- Quality radio group -->
+                                            <label type="button" class="btn btn-primary">
+                                                <input type="radio" name="qualityRadioGroup" value="yes" required>
+                                                Yes
+                                            </label>
+                                            <label type="button" class="btn btn-primary">
+                                                <input type="radio" name="qualityRadioGroup" value="no" checked>
+                                                No
+                                            </label><br>
+                                        </div>
+                                    </div>                                
+                                </div>
+                            </div>
+                            <div class="card-block pb-4">
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="submit" value="Save">
+                                    </div>                                
+                                </div>
+                            </div>
+                            <div class="card-block pb-4">
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class="card-subtitle mb-2 text-muted">Comments</h6>
+                                        <div class="input-group">
+                                            <textarea type="text" class="form-control" id="commentsInput" placeholder="Enter comments here..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- @Roman - add custom survey section (finish) -->
 
                     <!-- Functionality buttons -->
                     <div class="card-body pb-0 pt-2 px-1 px-md-2">
