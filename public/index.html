@@ -192,6 +192,73 @@
                         </button>
                     </div>
                     <hr />
+                    
+                    <!-- @Roman - add custom metadata section (start) --> 
+                    <button type="button" class="btn btn-block btn-primary collapsed" data-toggle="collapse" data-target="#patient_metadata">
+                        <div class="d-flex flex-row w-100">
+                            <div class="w-100 position-relative">
+                                <div class="position-absolute">
+                                    <span class="badge bg-dark hide" id="unseen_comments" style="display: none;">0</span>
+                                </div>
+                                Patient Metadata
+                            </div>
+                            <i class="collapse_rotate fa fa-chevron-down pull-right pt-1"></i>
+                        </div>
+                    </button>
+                    <div class="m-0 my-2">
+                        <div class="collapse card" id="patient_metadata">
+                            <table class="table table-striped table-borderless">
+                                <tbody>
+                                    <tr><td class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Year of Birth:</span>
+                                            <span id="metadata_year_of_birth">-</span>
+                                        </div>
+                                    </td></tr>
+                                    <tr><td class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Approximate Age at Diagnosis:</span>
+                                            <span id="metadata_approx_age">-</span>
+                                        </div>
+                                    </td></tr>
+                                    <tr><td class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Gender:</span>
+                                            <span id="metadata_gender">-</span>
+                                        </div>
+                                    </td></tr>
+                                    <tr><td class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Skin Type:</span>
+                                            <span id="metadata_skin_type">-</span>
+                                        </div>
+                                    </td></tr>
+                                    <tr><td class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Personal History:</span>
+                                            <span id="metadata_personal_history">-</span>
+                                        </div>
+                                    </td></tr>
+                                    <tr><td class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Family History:</span>
+                                            <span id="metadata_family_history">-</span>
+                                        </div>
+                                    </td></tr>
+                                    <tr><td class="py-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Location:</span>
+                                            <span id="metadata_location">-</span>
+                                        </div>
+                                    </td></tr>
+                                </tbody>
+                            </table>
+                            <div class="card-body p-2" id="global_comments">
+                                <!-- Comments -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @Roman - add custom metadata section (finish) --> 
 
                     <!-- Functionality buttons -->
                     <div class="card-body pb-0 pt-2 px-1 px-md-2">
