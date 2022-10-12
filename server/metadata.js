@@ -25,10 +25,17 @@ function xmlToObject(xmlData) {
     return parser.parse(xmlData);
 }
 
+/**
+ * @Roman - modified function
+ * added support for custom metadata (i.e. patient metadata)
+ */
 function extractImportantMetadata(jsonData) {
+
     const imageData = jsonData["OME"]["Image"].find(im => im["@_ID"] === "Image:0");
+    const annoData = jsonData["OME"]["StructuredAnnotations"]["CommentAnnotation"]; // MODIFIED
     const importantMetadata = {
-        MicroscopeModel: jsonData["OME"]["Instrument"] && jsonData["OME"]["Instrument"]["Microscope"]["@_Model"],
+        
+        MicroscopeModel: jsonData["OME"]["Instrument"] && jsonData["OME"]["Instrument"]["Microscope"], 
         NominalMagnification: jsonData["OME"]["Instrument"] && jsonData["OME"]["Instrument"]["Objective"]["@_NominalMagnification"],
         AcquisitionDate: imageData["AcquisitionDate"],
         PhysicalSizeX: imageData["Pixels"]["@_PhysicalSizeX"],
@@ -40,8 +47,16 @@ function extractImportantMetadata(jsonData) {
         SizeX: imageData["Pixels"]["@_SizeX"],
         SizeY: imageData["Pixels"]["@_SizeY"],
         SizeZ: imageData["Pixels"]["@_SizeZ"],
+        
+        YearOfBirth: annoData.find(item => item["@_ID"] === "Annotation:YearOfBirth")["Value"],
+        ApproxAge: annoData.find(item => item["@_ID"] === "Annotation:ApproxAge")["Value"],
+        Gender: annoData.find(item => item["@_ID"] === "Annotation:Gender")["Value"],
+        SkinType: annoData.find(item => item["@_ID"] === "Annotation:SkinType")["Value"],
+        PersonalHistory: annoData.find(item => item["@_ID"] === "Annotation:PersonalHistory")["Value"],
+        FamilyHistory: annoData.find(item => item["@_ID"] === "Annotation:FamilyHistory")["Value"],
+        Location: annoData.find(item => item["@_ID"] === "Annotation:Location")["Value"],
     };
-    return importantMetadata;
+    return importantMetadata;s
 }
 
 /**
