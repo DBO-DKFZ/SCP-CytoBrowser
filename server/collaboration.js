@@ -140,6 +140,10 @@ class Collaboration {
         this.broadcastMessage(msg, recipients, true);
     }
 
+    /**
+     * @Roman - modified
+     * Added a new case: surveyAction
+     */
     handleMessage(sender, msg) {
         // Keep track of the member that sent the message
         const member = this.members.get(sender);
@@ -178,12 +182,42 @@ class Collaboration {
             case "nameChange":
                 this.handleNameChange(sender, member, msg);
                 break;
+            // @Roman
+            // This case gets called when a survey is actively submitted on the client side 
+            // There is no passive live update (unlike the other cases listed here) as the survey
+            // is not meant for collaboration
+            case "surveyAction":
+                this.ongoingLoad.then(() => {
+                    this.handleSurveyAction(sender, member, msg);
+                })
             default:
                 this.forwardMessage(sender, msg);
                 this.log("Received a message with an unknown type, forwarding anyway.", console.info);
         }
     }
-
+    
+    /**
+     * @Roman - added function
+     * Modified from 'handleAnnotationAction'
+     * This function handles a single survey response by adding it as a field 
+     * to the Collaboration object which then gets actively saved to its own file. 
+     */
+    
+    handleSurveyAction(sender, member, msg) {
+        if (!member.ready) {
+            // Members who aren't ready shouldn't do anything with annotations
+            return;
+        }
+        switch (msg.actionType) {
+            case "add":
+                this.surveyAnswer = msg.surveyAnswer
+                break;
+            default:
+                // pass
+        }
+        this.saveSurveyState();
+    }
+    
     handleAnnotationAction(sender, member, msg) {
         if (!member.ready) {
             // Members who aren't ready shouldn't do anything with annotations
@@ -421,6 +455,17 @@ class Collaboration {
                 this.forceUpdate();
             }
         });
+    }
+    
+    /**
+     * @Roman - added function
+     * Adapted from 'saveState'
+     * Needs much less code as it is not constanlty called upon changes 
+     * but rather just once actively
+     */
+    saveSurveyState() {
+        console.log(this.surveyAnswer);
+        autosave.saveSurveyAnswer(this.id, this.image, this.surveyAnswer)
     }
 
     saveState() {
