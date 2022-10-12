@@ -27,6 +27,11 @@ const surveyHandler = (function (){
     };
     function setSaved(value) {
         saved = value
+        if (saved === true) {
+            document.getElementById("surveySaveState").innerHTML = "Saved";
+        } else {
+            document.getElementById("surveySaveState").innerHTML = "Unsaved";
+        }
     }
     
     /**
@@ -63,6 +68,8 @@ class SurveyAnswer {
  */
 function saveSurveyAnswer() {
     
+    console.log(document.getElementById("surveySaveState").innerHTML);
+    
     // get form content
     var imgId = document.getElementById("img_name").innerHTML;
     var diagnosis = document.querySelector('input[name="diagnosisRadioGroup"]:checked').value;
@@ -78,6 +85,7 @@ function saveSurveyAnswer() {
     
     // mark survey state as saved
     surveyHandler.setSaved(true);
+    
 
 };
  
