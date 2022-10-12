@@ -15,6 +15,9 @@ const metadataHandler = (function() {
         "Gm": 1e9
     };
 
+    /**
+     * @Roman - modified function
+     */
     function _metadataValuesAsReadable() {
         const res =
             _metadataValues.SizeX &&
@@ -38,6 +41,16 @@ const metadataHandler = (function() {
         const magnification = _metadataValues.NominalMagnification;
         const sigbits = _metadataValues.SignificantBits;
         const nChannels = _metadataValues.SizeC;
+        
+        // @Roman - added code block
+        const yearOfBirth = _metadataValues.YearOfBirth;
+        const approxAge = _metadataValues.ApproxAge;
+        const gender = _metadataValues.Gender;
+        const skinType = _metadataValues.SkinType;
+        const personalHistory = _metadataValues.PersonalHistory;
+        const familyHistory = _metadataValues.FamilyHistory;
+        const location = _metadataValues.Location;
+        
         const readableValues = {
             resolution: res ? `${res.x} &#215; ${res.y} &#215; ${res.z}` : "-",
             size: size ? `${size.x} &#215; ${size.y}` : "-",
@@ -45,11 +58,24 @@ const metadataHandler = (function() {
             microscope: microscope ? microscope : "-",
             magnification: magnification ? `${magnification}x` : "-",
             sigbits: sigbits ? `${sigbits} bits` : "-",
-            nChannels: nChannels ? nChannels : "-"
+            nChannels: nChannels ? nChannels : "-", 
+            
+            // @Roman - added code block
+            yearOfBirth: yearOfBirth ? yearOfBirth : "-",
+            approxAge: approxAge ? approxAge : "-",
+            gender: gender ? gender : "-",
+            skinType: skinType ? skinType : "-",
+            personalHistory: personalHistory ? personalHistory : "-",
+            familyHistory: familyHistory ? familyHistory : "-",
+            location: location ? location : "-",
         };
         return readableValues;
     }
 
+    /**
+     * @Roman - modified function
+     * added custom patient metadata fields
+     */
     function _updateDisplayedMetadataValues() {
         const readableValues = _metadataValuesAsReadable();
         $("#metadata_resolution").html(readableValues.resolution);
@@ -59,6 +85,15 @@ const metadataHandler = (function() {
         $("#metadata_magnification").html(readableValues.magnification);
         $("#metadata_sigbits").html(readableValues.sigbits);
         $("#metadata_nchannels").html(readableValues.nChannels);
+        
+        // @Roman - added code block
+        $("#metadata_year_of_birth").html(readableValues.yearOfBirth);
+        $("#metadata_approx_age").html(readableValues.approxAge);
+        $("#metadata_gender").html(readableValues.gender);
+        $("#metadata_skin_type").html(readableValues.skinType);
+        $("#metadata_personal_history").html(readableValues.personalHistory);
+        $("#metadata_family_history").html(readableValues.familyHistory);
+        $("#metadata_location").html(readableValues.location);
     }
 
     function _updateScalebar() {
