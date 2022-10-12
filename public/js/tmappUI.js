@@ -318,6 +318,30 @@ const tmappUI = (function(){
             }
         });
     }
+    
+    /**
+     * @Roman - added function
+     * Required for survey comment section as some keyboard keys function as hotkeys.
+     * This makes it difficult to write comments as focus shifts. 
+     */
+    function _initSurveyCommentSection() {
+        let keyUpTimeout = null;
+        const keyUpTime = 3000;
+        const input = $("#commentsInput");
+
+        input.keypress(e => e.stopPropagation());
+        input.keyup(e => {
+            e.stopPropagation();
+            clearTimeout(keyUpTimeout);
+            keyUpTimeout = setTimeout(updateQuery, keyUpTime);
+        });
+        input.keydown(e => {
+            e.stopPropagation();
+            if (e.code === "Escape" || e.code === "Enter" || e.code === "NumpadEnter") {
+                updateQuery();
+            }
+        });
+    }
 
     function _initFocusButtonEvents() {
         $("#focus_next").click(tmapp.incrementFocus);
@@ -451,6 +475,9 @@ const tmappUI = (function(){
     /**
      * Initialize UI components that need to be added programatically
      * and add any event handlers that are needed.
+     *
+     * @Roman - modified
+     * added '_initSurveyCommentSection'
      */
     function initUI() {
         _initAnnotationList();
@@ -468,6 +495,7 @@ const tmappUI = (function(){
         _initVisualizationSliders();
         _initKeyboardShortcuts();
         _initCollaborationMenu();
+        _initSurveyCommentSection();
     }
 
     /**
