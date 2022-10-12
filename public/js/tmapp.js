@@ -520,8 +520,27 @@ const tmapp = (function() {
      * of a collaboration and tries to swap images, this prompts them
      * if they want to stay on the image so they can save their progress
      * manually.
+     *
+     * @Roman - modified
+     * Added if-else block at start which checks whether survey was saved.
      */
     function openImage(imageName, callback, nochange, askAboutSaving=false) {
+        
+        // @Roman
+        // When the survey is not empty and unsaved, a warning will pop up
+        // asking the user if they really want to change image. 
+        if (!surveyHandler.isEmpty() && !surveyHandler.isSaved() &&
+            !confirm(`You are about to open ` +
+            `the image "${imageName}" without having saved your answer ` +
+            `If you continue, the answer on the ` +
+            `current image will be lost unless you save ` +
+            `it first.`)) {
+            nochange && nochange();
+            return;
+        } else {
+            surveyHandler.resetSurveyForm();
+        }
+        
         if (!annotationHandler.isEmpty() && !_collab && askAboutSaving &&
             !confirm(`You are about to open ` +
             `the image "${imageName}". Do you want to ` +
