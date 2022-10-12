@@ -87,7 +87,15 @@ function saveSurveyAnswer() {
     surveyHandler.setSaved(true);
     
 
+
 };
+
+/**
+ * Detect if survey form has changed and reset save state if changed
+ */
+$("#surveyForm :input").change(function() {
+    surveyHandler.setSaved(false);
+});
  
 
 
