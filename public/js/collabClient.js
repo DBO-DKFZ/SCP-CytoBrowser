@@ -491,6 +491,22 @@ const collabClient = (function(){
             id: _localMember.id
         });
     }
+    
+    /**
+     * @Roman - added function
+     * Modified from 'addAnnotation'
+     * Sends survey answer to serverside
+     */
+    function addSurveyAnswer(surveyAnswer) {
+        //skip computables
+        console.log("Calling 'surveyAnswer'")
+        console.log(surveyAnswer)
+        send({
+            type: "surveyAction",
+            actionType: "add",
+            surveyAnswer: surveyAnswer,
+        });
+    }
 
     /**
      * Notify collaborators about an annotation being added.
@@ -765,6 +781,8 @@ const collabClient = (function(){
         });
     }
 
+    // @Roman
+    // added export for 'addSurveyAnswer'
     return {
         createCollab,
         connect,
@@ -786,6 +804,7 @@ const collabClient = (function(){
         followView,
         stopFollowing,
         getVersions,
-        revertVersion
+        revertVersion,
+        addSurveyAnswer
     };
 })();
