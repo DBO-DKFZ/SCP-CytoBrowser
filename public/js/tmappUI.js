@@ -328,7 +328,12 @@ const tmappUI = (function(){
         let keyUpTimeout = null;
         const keyUpTime = 3000;
         const input = $("#commentsInput");
-
+        const initialQuery = input.val();
+        annotationVisuals.setFilterQueryWithoutUpdating(initialQuery);
+        function updateQuery() {
+            const query = input.val();
+            annotationVisuals.setFilterQuery(query);
+        }
         input.keypress(e => e.stopPropagation());
         input.keyup(e => {
             e.stopPropagation();
