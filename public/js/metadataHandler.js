@@ -17,7 +17,7 @@ const metadataHandler = (function() {
 
     /**
      * @Roman - modified function
-     * Included patient metadata as well as survey answers if a question is already filled out
+     * Included patient metadata as well as survey answer, if a question is already filled out
      * and an answer is available on the server. 
      */
     function _metadataValuesAsReadable() {
@@ -58,7 +58,7 @@ const metadataHandler = (function() {
         const surveyDiagnosis = _metadataValues.surveyAnswer?.diagnosis;
         const surveyConfidence = _metadataValues.surveyAnswer?.confidence;
         const surveyProblemsImgQuality = _metadataValues.surveyAnswer?.problemsImgQuality;
-        const surveyComment = _metadataValues.surveyAnswer?.comment;
+        const surveyComment = _metadataValues.surveyAnswer?.comments;
                 
         const readableValues = {
             resolution: res ? `${res.x} &#215; ${res.y} &#215; ${res.z}` : "-",
@@ -85,12 +85,15 @@ const metadataHandler = (function() {
             surveyComment: surveyComment ? surveyComment : null,
 
         };
+
         return readableValues;
+
     }
 
     /**
      * @Roman - modified function
      * added custom patient metadata fields
+     * added custom survey answer fields
      */
     function _updateDisplayedMetadataValues() {
         const readableValues = _metadataValuesAsReadable();
@@ -112,8 +115,9 @@ const metadataHandler = (function() {
         $("#metadata_location").html(readableValues.location);
         
         // @Roman - added code block for survey answer
-        if (readableValues.surveyDiagnosis !== null && readableValues.surveyConfidence !== null &&
-            readableValues.surveyProblemsImgQuality !== null && readableValues.surveyComment !== null) {
+        if (readableValues.surveyDiagnosis !== null && 
+            readableValues.surveyConfidence !== null &&
+            readableValues.surveyProblemsImgQuality !== null) {
             
             setRadioButton("diagnosisRadioGroup", readableValues.surveyDiagnosis);
             setRadioButton("confidenceRadioGroup", readableValues.surveyConfidence);
