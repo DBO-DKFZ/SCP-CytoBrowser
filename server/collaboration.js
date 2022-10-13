@@ -397,7 +397,7 @@ class Collaboration {
             annotations: this.annotations,
             classConfig: this.classConfig,
             comments: this.comments,
-            metadata: metadata.getMetadataForImage(this.image)
+            metadata: metadata.getMetadataForImage(this.image),
         }
     }
 
@@ -464,8 +464,7 @@ class Collaboration {
      * but rather just once actively
      */
     saveSurveyState() {
-        console.log(this.surveyAnswer);
-        autosave.saveSurveyAnswer(this.id, this.image, this.surveyAnswer)
+        autosave.saveSurveyAnswer(this.image, this.surveyAnswer)
     }
 
     saveState() {
@@ -636,9 +635,13 @@ function getAvailable(image) {
     });
 }
 
+/**
+ * @Roman - modified
+ * add autosaveDir parameter to ./metadata as this module makes use of autosave functions
+ */
 module.exports = function(autosaveDir, metadataJsonDir) {
     autosave = require("./autosave")(autosaveDir);
-    metadata = require("./metadata")(metadataJsonDir);
+    metadata = require("./metadata")(metadataJsonDir, autosaveDir);
     return {
         getId,
         joinCollab,

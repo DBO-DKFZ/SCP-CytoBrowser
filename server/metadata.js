@@ -27,7 +27,7 @@ function xmlToObject(xmlData) {
 
 /**
  * @Roman - modified function
- * added support for custom metadata (i.e. patient metadata)
+ * added support for patient metadata 
  */
 function extractImportantMetadata(jsonData) {
 
@@ -60,19 +60,31 @@ function extractImportantMetadata(jsonData) {
 }
 
 /**
+ * @Roman - modified function
  * Get important metadata that corresponds to a specified image.
  * @param {string} imageName The name of the image.
  * @returns {Object} Relevant metadata for the image.
+ *
+ * Also get survey answer if the file exists.
  */
 function getMetadataForImage(imageName) {
-    if (metadataCache[imageName]) {
+    
+    // @Roman - do not want to cache metadata as our metadata includes
+    // survey answers and is therefore not static. If cached, we would not get updates. 
+    if (false) { // metadataCache[imageName]
         return metadataCache[imageName];
     }
     else {
         const filename = `${jsonDir}/${imageName}.json`;
         try {
             const data = JSON.parse(fs.readFileSync(filename));
+            data["surveyAnswer"] = autosave.loadSurveyAnswer(imageName);
+            console.log("surveyAnswer from getMetadataForImage()");
+            console.log(data["surveyAnswer"]);
+            
+            // Continue here
             console.log(`Loading metadata from ${filename}`);
+            
             metadataCache[imageName] = data;
             setTimeout(() =>
                 delete metadataCache[imageName],
@@ -114,12 +126,18 @@ function main() {
     }
 }
 
-module.exports = function(dir) {
+/**
+ * @Roman - modified
+ * include autosaveDir parameter as this files requires functions from the autosave module.
+ */
+module.exports = function(dir, autosaveDir) {
     jsonDir = dir;
+    autosave = require("./autosave")(autosaveDir);
     return {
         getMetadataForImage: getMetadataForImage
     }
 };
+
 
 if (require.main === module) {
     main();
