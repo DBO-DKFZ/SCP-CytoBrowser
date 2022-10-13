@@ -29,12 +29,11 @@ function getFilename(id, image) {
 /**
  * @Roman - added function
  * Modification of 'getFilename'
- * Returns a filename specifically for the survey response
+ * Returns a filename specifically for the survey response.
  */
-function getSurveyAnswerFilename(id, image) {
-    const sanitizedId = sanitize(String(id));
+function getSurveyAnswerFilename(image) {
     const sanitizedImage = sanitize(String(image));
-    return `${sanitizedImage}_${sanitizedId}_survey_answer`;
+    return `${sanitizedImage}_survey_answer`;
 }
 
 /**
@@ -69,18 +68,30 @@ function saveAnnotations(id, image, data) {
 
 /**
  * @Roman - added function
+ * Load survey answer
+ * @param {string} image The name of the image being saved.
+ * @returns {Promise<Object>} Promise that resolves with the parsed data.
+ */
+function loadSurveyAnswer(image) {
+    const subDir = getSubDirName(image);
+    const filename = getSurveyAnswerFilename(image);
+    const path = `${autosaveDir}/${subDir}/${filename}.json`;
+    return JSON.parse(fs.readFileSync(path));
+}
+
+/**
+ * @Roman - added function
  * Save survey answer data in a seperate file (i.e. not the same file as for annotations).
  * Use the historyTracker module as I don't want to make any mistakes while saving.
  * Also keep this function in the autosave file, even though it is not used for autosaving
  * but rather explicitly when the user clicks 'save' in the HTML form. 
- * @param {string} id The id of the collaboration.
  * @param {string} image The name of the image being saved.
  * @param {Object} surveyAnswer The survey answer to be stored.
  * @returns {Promise} Promise that resolves once the data is stored.
  */
-function saveSurveyAnswer(id, image, surveyAnswer) {
+function saveSurveyAnswer(image, surveyAnswer) {
     const subDir = getSubDirName(image);
-    const filename = getSurveyAnswerFilename(id, image);
+    const filename = getSurveyAnswerFilename(image);
     const dir = `${autosaveDir}/${subDir}`;
     const path = `${autosaveDir}/${subDir}/${filename}.json`;
     return fsPromises.mkdir(dir, {recursive: true}).then(() => {
@@ -162,7 +173,7 @@ function revertAnnotations(id, image, versionId) {
 }
 
 /**
- * @Roman - added export to include 'saveSurveyAnswer'
+ * @Roman - added export to include 'saveSurveyAnswer' and 'loadSurveyAnswer'
  */
 module.exports = function(dir) {
     if (!dir) {
@@ -177,5 +188,6 @@ module.exports = function(dir) {
         getAvailableVersions: getAvailableVersions,
         revertAnnotations: revertAnnotations,
         saveSurveyAnswer: saveSurveyAnswer,
+        loadSurveyAnswer: loadSurveyAnswer, 
     };
 }
