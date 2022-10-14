@@ -29,6 +29,7 @@ const fs = require("fs");
 const express = require("express");
 const availableImages = require("./server/availableImages")(dataDir);
 const collaboration = require("./server/collaboration")(collabDir, metadataDir);
+const surveyStatus = require("./server/surveyStatus")(collabDir, dataDir); // @Roman - added module requirement
 const open = require("open");
 
 // Initialize the server
@@ -56,6 +57,20 @@ app.get("/api/images", (req, res) => {
     else {
         res.status(200);
         res.json(images);
+    }
+});
+
+// @Roman
+// Get information on current survey status
+app.get("/api/survey/status", (req, res) => {
+    const currentSurveyStatus = surveyStatus();
+    if (currentSurveyStatus === null) {
+        res.status(500);
+        res.send("The server was unable to find current survey status.");
+    }
+    else {
+        res.status(200);
+        res.json(currentSurveyStatus);
     }
 });
 
