@@ -116,7 +116,7 @@ const surveyHandler = (function (){
         var imgId = document.getElementById("img_name").innerHTML;
         var diagnosis = document.querySelector('input[name="diagnosisRadioGroup"]:checked').value;
         var confidence = document.querySelector('input[name="confidenceRadioGroup"]:checked').value;
-        var quality = document.querySelector('input[name="qualityRadioGroup"]:checked').value;
+        var problemsImgQuality = document.querySelector('input[name="qualityRadioGroup"]:checked').value;
         var comments = document.getElementById("commentsInput").value
 
         // construct survey answer object
@@ -124,7 +124,7 @@ const surveyHandler = (function (){
             "imgId": imgId, 
             "diagnosis": diagnosis,
             "confidence": confidence,
-            "quality": quality,
+            "problemsImgQuality": problemsImgQuality,
             "comments": comments
         };
 
