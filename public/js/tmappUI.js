@@ -483,11 +483,16 @@ const tmappUI = (function(){
      * Image Browser modal window with an additional task:
      * To show the survey status (progress) as well. 
      */
-    function _initImageBrowserButtons() {
-        $("#image_browser_btn1").click(() => {
-            surveyHandler.updateSurveyStatus();
-        });
-        $("#image_browser_btn2").click(() => {
+    function _initImageBrowserModal() {
+        //surveyHandler.updateSurveyStatus();
+        // $("#image_browser_btn1").click(() => {
+        //     surveyHandler.updateSurveyStatus();
+        // });
+        // $("#image_browser_btn2").click(() => {
+        //     surveyHandler.updateSurveyStatus(); 
+        // });
+        
+        $("#image_browser").on('shown.bs.modal', function () {
             surveyHandler.updateSurveyStatus(); 
         });
     }
@@ -532,7 +537,7 @@ const tmappUI = (function(){
         _initKeyboardShortcuts();
         _initCollaborationMenu();
         _initSurveyCommentSection();
-        _initImageBrowserButtons();
+        _initImageBrowserModal();
         _initSurvey();
     }
 
