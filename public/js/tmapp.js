@@ -531,7 +531,7 @@ const tmapp = (function() {
         // asking the user if they really want to change image. 
         if (!surveyHandler.isEmpty() && !surveyHandler.isSaved() &&
             !confirm(`You are about to open ` +
-            `the image "${imageName}" without having saved your answer ` +
+            `image "${imageName}" without having saved your answer. ` +
             `If you continue, the answer on the ` +
             `current image will be lost unless you save ` +
             `it first.`)) {
