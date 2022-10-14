@@ -1,0 +1,10 @@
+.questionComplete{
+    background: rgba(0,128,0,0.80);
+    overflow: hidden;
+    height: 100%;
+    z-index: 2;
+}
+
+.questionCompleteText{
+    color: white !important;
+}

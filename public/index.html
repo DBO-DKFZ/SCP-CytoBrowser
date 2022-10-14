@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/bootstrap-slider.min.css">
     <link rel="stylesheet" href="css/cytobrowsertheme.css">
     <link rel="stylesheet" href="css/tm-icon-style.css">
+    <link rel="stylesheet" href="css/image-browser.css"> <!-- Roman - added stylesheet for image browser-->
     <title>CytoBrowser</title>
     <meta name="description" content="CytoBrowser, a JavaScript and Node.js driven environment for fast and accessible collaborative online visualization, assessment, and annotation of very large microscopy images.">
     <meta property="og:title" content="CytoBrowser">
@@ -41,7 +42,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar_items">
                 <ul class="nav navbar-nav align-items-end">
-                    <li class="nav-item"><a class="nav-link font-weight-bold" style="cursor: pointer; font-size: 1.2rem;" data-toggle="modal" data-target="#image_browser">
+                    <!-- @Roman - added id -->
+                    <li class="nav-item"><a class="nav-link font-weight-bold" style="cursor: pointer; font-size: 1.2rem;" data-toggle="modal" data-target="#image_browser" id="image_browser_btn1">
                         <span class="fa fa-caret-down"> </span> Image: <span id="img_name"> -</span>
                     </a></li>
                     <li class="navbar-text font-weight-bold p-2"> Z-level: <span id="img_zlevel"> -</span></li>
@@ -72,7 +74,8 @@
                 <div class="card w-100">
                     <!-- Modal access -->
                     <div class="card-body pb-2 px-1 px-md-2">
-                        <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#image_browser">
+                        <!-- @Roman - added id -->
+                        <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#image_browser" id="image_browser_btn2">
                             Open image browser
                         </button>
                         <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#collaboration_menu">
@@ -436,7 +439,7 @@
       <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Select an image</h5>
+            <h5 class="modal-title" id="image_browser_title">Select an image</h5> <!-- Roman - added id -->
             <button type="button" class="close" data-dismiss="modal">
               <span>&times;</span>
             </button>

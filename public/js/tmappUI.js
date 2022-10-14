@@ -476,13 +476,34 @@ const tmappUI = (function(){
             collabPicker.open(image,false,false);
         });
     }
+    
+    
+
+    
+
+    
+    /**
+     * @Roman - added function
+     * Initialize the two buttons responsible for opening the
+     * Image Browser modal window with an additional task:
+     * To show the survey status (progress) as well. 
+     */
+    function _initImageBrowserButtons() {
+        $("#image_browser_btn1").click(() => {
+            surveyHandler.updateSurveyStatus();
+        });
+        $("#image_browser_btn2").click(() => {
+            surveyHandler.updateSurveyStatus(); 
+        });
+        
+    }
 
     /**
      * Initialize UI components that need to be added programatically
      * and add any event handlers that are needed.
      *
      * @Roman - modified
-     * added '_initSurveyCommentSection'
+     * added '_initSurveyCommentSection' and '_initImageBrowserButtons'
      */
     function initUI() {
         _initAnnotationList();
@@ -501,6 +522,7 @@ const tmappUI = (function(){
         _initKeyboardShortcuts();
         _initCollaborationMenu();
         _initSurveyCommentSection();
+        _initImageBrowserButtons();
     }
 
     /**
@@ -704,7 +726,7 @@ const tmappUI = (function(){
         const container = $("#available_images");
         htmlHelper.buildImageBrowser(container, images);
     }
-
+    
     /**
      * Set the displayed user name in the UI.
      * @param {string} txt The username to display.
