@@ -104,6 +104,37 @@ const surveyHandler = (function (){
             }
         }
     }
+
+    /**
+     * Function which gets called when the survey is submitted by the user
+     */
+    function saveSurveyAnswer() {
+
+        console.log(document.getElementById("surveySaveState").innerHTML);
+
+        // get form content
+        var imgId = document.getElementById("img_name").innerHTML;
+        var diagnosis = document.querySelector('input[name="diagnosisRadioGroup"]:checked').value;
+        var confidence = document.querySelector('input[name="confidenceRadioGroup"]:checked').value;
+        var quality = document.querySelector('input[name="qualityRadioGroup"]:checked').value;
+        var comments = document.getElementById("commentsInput").value
+
+        // construct survey answer object
+        const answer = {
+            "imgId": imgId, 
+            "diagnosis": diagnosis,
+            "confidence": confidence,
+            "quality": quality,
+            "comments": comments
+        };
+
+        // notify collab client for backend messaging and processing
+        collabClient.addSurveyAnswer(answer);
+
+        // mark survey state as saved
+        setSaved(true);
+    };
+
     
     return {
         resetSurveyForm,
@@ -111,55 +142,12 @@ const surveyHandler = (function (){
         isSaved,
         setSaved,
         updateSurveyStatus,
+        saveSurveyAnswer,
     };
 })();
 
-/**
- * Object which holds a single survey response
- */
-class SurveyAnswer {
-  constructor(imgId, diagnosis, confidence, problemsImgQuality, comments) {
-    this.imgId = imgId;
-    this.diagnosis = diagnosis;
-    this.confidence = confidence;
-    this.problemsImgQuality = problemsImgQuality;
-    this.comments = comments;
-  }
-};
-
-/**
- * Function which gets called when the survey is submitted by the user
- */
-function saveSurveyAnswer() {
-    
-    console.log(document.getElementById("surveySaveState").innerHTML);
-    
-    // get form content
-    var imgId = document.getElementById("img_name").innerHTML;
-    var diagnosis = document.querySelector('input[name="diagnosisRadioGroup"]:checked').value;
-    var confidence = document.querySelector('input[name="confidenceRadioGroup"]:checked').value;
-    var quality = document.querySelector('input[name="qualityRadioGroup"]:checked').value;
-    var comments = document.getElementById("commentsInput").value
-    
-    // construct survey answer object
-    answer = new SurveyAnswer(imgId, diagnosis, confidence, quality, comments);
-    
-    // notify collab client for backend messaging and processing
-    collabClient.addSurveyAnswer(answer);
-    
-    // mark survey state as saved
-    surveyHandler.setSaved(true);
-    
 
 
-};
-
-/**
- * Detect if survey form has changed and reset save state if changed
- */
-$("#surveyForm :input").change(function() {
-    surveyHandler.setSaved(false);
-});
  
 
 

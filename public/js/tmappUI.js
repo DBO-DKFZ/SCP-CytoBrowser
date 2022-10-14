@@ -477,11 +477,6 @@ const tmappUI = (function(){
         });
     }
     
-    
-
-    
-
-    
     /**
      * @Roman - added function
      * Initialize the two buttons responsible for opening the
@@ -495,7 +490,22 @@ const tmappUI = (function(){
         $("#image_browser_btn2").click(() => {
             surveyHandler.updateSurveyStatus(); 
         });
+    }
+    
+    /**
+     * @Roman - added function 
+     * Detect if survey form has changed and reset save state if changed
+     */
+    function _initSurvey() {
         
+        $("#surveyForm").submit(function(event){
+            event.preventDefault();
+            surveyHandler.saveSurveyAnswer();
+        });
+
+        $("#surveyForm :input").change(function() {
+            surveyHandler.setSaved(false);
+        });
     }
 
     /**
@@ -503,7 +513,7 @@ const tmappUI = (function(){
      * and add any event handlers that are needed.
      *
      * @Roman - modified
-     * added '_initSurveyCommentSection' and '_initImageBrowserButtons'
+     * added '_initSurveyCommentSection', '_initImageBrowserButtons' and '_initSurvey'
      */
     function initUI() {
         _initAnnotationList();
@@ -523,6 +533,7 @@ const tmappUI = (function(){
         _initCollaborationMenu();
         _initSurveyCommentSection();
         _initImageBrowserButtons();
+        _initSurvey();
     }
 
     /**
