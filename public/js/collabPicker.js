@@ -265,6 +265,10 @@ const collabPicker = (function() {
     }
 
     /**
+     * @Roman - modified
+     * Now always creates a new collab as we do not care about collaborations and 
+     * this makes everything else easier. 
+     *
      * Prompt the user to either start a new collaboration or select an
      * existing collaboration for a given image.
      * @param {string} image The name of the image being collaborated on.
@@ -277,7 +281,7 @@ const collabPicker = (function() {
     async function open(image, forceChoice=false, autostart=true, imageCallback=null) {
         _autostart = autostart;
         _imageCallback = imageCallback;
-
+        
         if (image !== _lastShownImage) {
             clear();
         }
@@ -291,25 +295,7 @@ const collabPicker = (function() {
             tmappUI.clearImageError();
         }
 
-        if (_autostart && !_availableCollabs.length) { //no options, just create new
-            _createCollab();
-        }
-        else { //select Collab or create new
-            const activeModal = $(".modal.show");
-            activeModal.modal("hide");
-
-            $("#collab-picker").data("bs.modal", null);
-            if (forceChoice) {
-                $("#collab-close-button").hide();
-                $("#collab-picker").modal({backdrop: "static", keyboard: false});
-            }
-            else {
-                $("#collab-close-button").show();
-                $("#collab-picker").modal();
-            }
-
-            $("#collab-picker").one("hide.bs.modal", () => activeModal.modal("show"));
-        }
+        _createCollab();
     }
 
     /**
