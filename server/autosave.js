@@ -76,7 +76,13 @@ function loadSurveyAnswer(image) {
     const subDir = getSubDirName(image);
     const filename = getSurveyAnswerFilename(image);
     const path = `${autosaveDir}/${subDir}/${filename}.json`;
-    return JSON.parse(fs.readFileSync(path));
+    if (fs.existsSync(path)) {
+        return JSON.parse(fs.readFileSync(path));
+    } 
+    else {
+        return JSON.parse('{}');
+    }
+    
 }
 
 /**
