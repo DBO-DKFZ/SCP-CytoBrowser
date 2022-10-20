@@ -1,133 +1,143 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/tmcpmain.min.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-slider.min.css">
-    <link rel="stylesheet" href="css/cytobrowsertheme.css">
-    <link rel="stylesheet" href="css/tm-icon-style.css">
-    <link rel="stylesheet" href="css/image-browser.css"> <!-- Roman - added stylesheet for image browser-->
-    <title>CytoBrowser</title>
-    <meta name="description" content="CytoBrowser, a JavaScript and Node.js driven environment for fast and accessible collaborative online visualization, assessment, and annotation of very large microscopy images.">
-    <meta property="og:title" content="CytoBrowser">
-    <meta property="og:image" content="https://raw.githubusercontent.com/MIDA-group/CytoBrowser/master/public/misc/uulogoredCyBr.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src="js/d3/d3.min.js"></script>
-    <script src="js/jquery/jquery-3.4.1.slim.min.js"></script>
-</head>
-
-<!-- Styling required to cover full page -->
-<style>
-    html, body {
+    <head>
+        <link rel="shortcut icon" href="favicon.ico">
+        <link rel="stylesheet" href="css/tmcpmain.min.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-slider.min.css">
+        <link rel="stylesheet" href="css/cytobrowsertheme.css">
+        <link rel="stylesheet" href="css/tm-icon-style.css">
+        <link rel="stylesheet" href="css/image-browser.css">
+        <!-- Roman - added stylesheet for image browser-->
+        <title>CytoBrowser</title>
+        <meta name="description" content="CytoBrowser, a JavaScript and Node.js driven environment for fast and accessible collaborative online visualization, assessment, and annotation of very large microscopy images.">
+        <meta property="og:title" content="CytoBrowser">
+        <meta property="og:image" content="https://raw.githubusercontent.com/MIDA-group/CytoBrowser/master/public/misc/uulogoredCyBr.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script src="js/d3/d3.min.js"></script>
+        <script src="js/jquery/jquery-3.4.1.slim.min.js"></script>
+    </head>
+    <!-- Styling required to cover full page -->
+    <style>
+        html, body {
         height: 100%;
-    }
-    body {
+        }
+        body {
         display: flex;
         flex-direction: column;
-    }
-</style>
-
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-primary pl-2 pl-lg-0 py-0 py-xl-1" id="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" style="padding-top:0.5vh; padding-bottom:0.5vh; outline: none;" href="https://mida-group.github.io/CytoBrowser/" target="_blank" rel="noopener noreferrer">
+        }
+    </style>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-primary pl-2 pl-lg-0 py-0 py-xl-1" id="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" style="padding-top:0.5vh; padding-bottom:0.5vh; outline: none;" href="https://mida-group.github.io/CytoBrowser/" target="_blank" rel="noopener noreferrer">
                 <img style="height:35px; min-height:20px; max-height:8vh; overflow: visible;" src="misc/uulogowhiteCyBr.png">
-            </a>
-
-            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbar_items">
+                </a>
+                <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbar_items">
                 <span class="navbar-toggler-icon" style="min-height:12px; max-height:5vh;"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar_items">
-                <ul class="nav navbar-nav align-items-end">
-                    <li class="nav-item"><a class="nav-link font-weight-bold" style="cursor: pointer; font-size: 1.2rem;" data-toggle="modal" data-target="#image_browser">
-                        <span class="fa fa-caret-down"> </span> Image: <span id="img_name"> -</span>
-                    </a></li>
-                    <li class="navbar-text font-weight-bold p-2"> Z-level: <span id="img_zlevel"> -</span></li>
-                    <li class="navbar-text font-weight-bold p-2"> Zoom: <span id="img_zoom"> -</span></li>
-                    <li class="navbar-text font-weight-bold p-2"> Rotation: <span id="img_rotation"> -</span></li>
-                    <li class="navbar-text font-weight-bold p-2"> <span id="last_autosave"></span></li>
-                </ul>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar_items">
+                    <ul class="nav navbar-nav align-items-end">
+                        <li class="nav-item"><a class="nav-link font-weight-bold" style="cursor: pointer; font-size: 1.2rem;" data-toggle="modal" data-target="#image_browser">
+                            <span class="fa fa-caret-down"> </span> Image: <span id="img_name"> -</span>
+                            </a>
+                        </li>
+                        <li class="navbar-text font-weight-bold p-2"> Z-level: <span id="img_zlevel"> -</span></li>
+                        <li class="navbar-text font-weight-bold p-2"> Zoom: <span id="img_zoom"> -</span></li>
+                        <li class="navbar-text font-weight-bold p-2"> Rotation: <span id="img_rotation"> -</span></li>
+                        <li class="navbar-text font-weight-bold p-2"> <span id="last_autosave"></span></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-
-    <!-- Main content -->
-    <div id="main_content" class="container-fluid d-flex h-100 position-relative" style="min-width: 400px" tabindex="-1">
+        </nav>
+        <!-- Main content -->
+        <div id="main_content" class="container-fluid d-flex h-100 position-relative" style="min-width: 400px" tabindex="-1">
         <div id="main_row" class="row flex-fill position-absolute m-0 pr-1" style="right: 0; top: 0; left: 0; bottom: 0;">
-            <div class="col md-10 px-0" style="min-width: 50%; min-height: 85%; width: 100%; overflow: visible; flex-grow: 100;"> <!-- Doesn't make sense to have overflow of the viewer -->
-                <div id="ISS_viewer" class="ISS_viewer blurrable flex-grow-1 h-100 w-100"></div>
-                <div id="alert_wrapper" style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; position: absolute; top: 0; padding: 5%; pointer-events: none"></div>
-            </div>
+        <div class="col md-10 px-0" style="min-width: 50%; min-height: 85%; width: 100%; overflow: visible; flex-grow: 100;">
+            <!-- Doesn't make sense to have overflow of the viewer -->
+            <div id="ISS_viewer" class="ISS_viewer blurrable flex-grow-1 h-100 w-100"></div>
+            <div id="alert_wrapper" style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; position: absolute; top: 0; padding: 5%; pointer-events: none"></div>
+        </div>
+        <!-- Right side main toolbar -->
+        <div class="col-auto d-flex flex-column md-2 pt-2 pl-1 pr-0 h-100" style="overflow-y:auto; overflow-x:hidden; flex-grow: 1;" id="rtoolbar">
+        <div class="card w-100">
+        <!-- Modal access -->
+        <div class="card-body pb-2 px-1 px-md-2">
+            <button type="button" class="btn btn-block btn-secondary" data-toggle="modal" data-target="#image_browser">
+            Open Image Browser
+            </button>
+        </div>
 
-            <!-- Right side main toolbar -->
-            <div class="col-auto d-flex flex-column md-2 pt-2 pl-1 pr-0 h-100" style="overflow-y:auto; overflow-x:hidden; flex-grow: 1;" id="rtoolbar">
-                <div class="card w-100">
-                    <!-- Modal access -->
-                    <div class="card-body pb-2 px-1 px-md-2">
-                        <button type="button" class="btn btn-block btn-secondary" data-toggle="modal" data-target="#image_browser">
-                            Open Image Browser
-                        </button>
-		    </div>
-                    
-                    <!-- @Roman - add custom metadata section (start) --> 
-			<div class="card-body pb-0 pt-2 px-2">
-			<div class="card-block pb-3">
+        <!-- @Roman - add custom metadata section (start) --> 
+        <div class="card-body pb-0 pt-2 px-2">
+            <div class="card-block pb-3">
                 <!-- Patient Metadata -->
-                    <div class="col">
-                        <h6 class="card-subtitle mb-2 text-muted">Patient Metadata</h6>
-			<div id="patient_metadata">
-                            <table class="table table-striped table-borderless">
-                                <tbody>
-                                    <tr><td class="py-1">
+                <div class="col">
+                    <h6 class="card-subtitle mb-2 text-muted">Patient Metadata</h6>
+                    <div id="patient_metadata">
+                        <table class="table table-striped table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td class="py-1">
                                         <div class="d-flex justify-content-between">
                                             <span>Year of Birth:</span>
                                             <span id="metadata_year_of_birth">-</span>
                                         </div>
-                                    </td></tr>
-                                    <tr><td class="py-1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
                                         <div class="d-flex justify-content-between">
                                             <span>Approximate Age at Diagnosis:</span>
                                             <span id="metadata_approx_age">-</span>
                                         </div>
-                                    </td></tr>
-                                    <tr><td class="py-1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
                                         <div class="d-flex justify-content-between">
                                             <span>Gender:</span>
                                             <span id="metadata_gender">-</span>
                                         </div>
-                                    </td></tr>
-                                    <tr><td class="py-1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
                                         <div class="d-flex justify-content-between">
                                             <span>Skin Type According to Fitzpatrick:</span>
                                             <span id="metadata_skin_type">-</span>
                                         </div>
-                                    </td></tr>
-                                    <tr><td class="py-1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
                                         <div class="d-flex justify-content-between">
                                             <span>Personal History of Melanoma:</span>
                                             <span id="metadata_personal_history">-</span>
                                         </div>
-                                    </td></tr>
-                                    <tr><td class="py-1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
                                         <div class="d-flex justify-content-between">
                                             <span>Family History of Melanoma:</span>
                                             <span id="metadata_family_history">-</span>
                                         </div>
-                                    </td></tr>
-                                    <tr><td class="py-1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
                                         <div class="d-flex justify-content-between">
                                             <span>Localisation:</span>
                                             <span id="metadata_location">-</span>
                                         </div>
-                                    </td></tr>
-                                </tbody>
-                            </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <!-- @Roman - add custom metadata section (finish) --> 
-                    
                     <!-- @Roman - add custom survey section (start) --> 
                     <form id="surveyForm">
                         <div class="card-body pb-0 pt-2 px-1 px-md-2">
@@ -137,26 +147,26 @@
                                         <h6 class="card-subtitle mb-2 text-muted">Category of the Diagnosis</h6>
                                         <!-- Diagnosis radio group -->
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="diagnosisRadioGroup" value="melanoma" required>
-                                            Melanoma
+                                        <input type="radio" name="diagnosisRadioGroup" value="melanoma" required>
+                                        Melanoma
                                         </label>
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="diagnosisRadioGroup" value="nevus">
-                                            Nevus
-					</label>
+                                        <input type="radio" name="diagnosisRadioGroup" value="nevus">
+                                        Nevus
+                                        </label>
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="diagnosisRadioGroup" value="melanoma in-situ">
-                                            Melanoma in-situ
-					</label>
+                                        <input type="radio" name="diagnosisRadioGroup" value="melanoma in-situ">
+                                        Melanoma in-situ
+                                        </label>
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="diagnosisRadioGroup" value="lentigo maligna">
-                                            Lentigo Maligna
+                                        <input type="radio" name="diagnosisRadioGroup" value="lentigo maligna">
+                                        Lentigo Maligna
                                         </label>
                                         <label type="button" class="btn btn-primary"> 
-                                            <input type="radio" name="diagnosisRadioGroup" value="other">
-                                            Other
+                                        <input type="radio" name="diagnosisRadioGroup" value="other">
+                                        Other
                                         </label>  
-				     </div>                         
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-block pb-2">
@@ -165,22 +175,22 @@
                                         <h6 class="card-subtitle mb-2 text-muted">Confidence of the Diagnosis (1=low, 4=high)</h6>
                                         <!-- Confidence radio group -->
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="confidenceRadioGroup" value="1" required>
-                                            1
+                                        <input type="radio" name="confidenceRadioGroup" value="1" required>
+                                        1
                                         </label>
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="confidenceRadioGroup" value="2">
-                                            2
+                                        <input type="radio" name="confidenceRadioGroup" value="2">
+                                        2
                                         </label>
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="confidenceRadioGroup" value="3">
-                                            3
+                                        <input type="radio" name="confidenceRadioGroup" value="3">
+                                        3
                                         </label>
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="confidenceRadioGroup" value="4">
-                                            4
+                                        <input type="radio" name="confidenceRadioGroup" value="4">
+                                        4
                                         </label><br>    
-				    </div>                        
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-block pb-2">
@@ -189,22 +199,25 @@
                                         <h6 class="card-subtitle mb-2 text-muted">Problems with Image Quality?</h6>
                                         <!-- Quality radio group -->
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="qualityRadioGroup" value="yes" required>
-                                            Yes
+                                        <input type="radio" name="qualityRadioGroup" value="yes" required>
+                                        Yes
                                         </label>
                                         <label type="button" class="btn btn-primary">
-                                            <input type="radio" name="qualityRadioGroup" value="no" checked>
-                                            No
+                                        <input type="radio" name="qualityRadioGroup" value="no" checked>
+                                        No
                                         </label> 
- 				     </div>                              
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-block pb-3">
                                 <div class="row">
                                     <div class="col">
-                                        <label id="surveySaveState"> <Unsaved></label><br> 
-					<input type="submit" value="Save" class="btn btn-secondary"> 
- 				     </div>                            
+                                        <label id="surveySaveState">
+                                            Unsaved
+                                        </label>
+                                        <br> 
+                                        <input type="submit" value="Save" class="btn btn-secondary"> 
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-block pb-4">
@@ -220,579 +233,578 @@
                         </div>
                     </form>
                     <!-- @Roman - add custom survey section (finish) -->
-            </div> <!-- End of toolbar -->
-        </div> <!-- End of row -->
-    </div> <!-- End of container -->
-
-    <!-- Image browser -->
-    <div class="modal fade" id="image_browser" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="image_browser_title">Select an image</h5> <!-- Roman - added id -->
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div id="available_images" class="modal-body" style="overflow-y: auto; max-height:85vh;">
-
-          </div>
-        </div>
-      </div>
-    </div> <!-- End of image browser -->
-
-    <!-- Version select -->
-    <div class="modal fade" id="version_select" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Select file version</h5>
-          </div>
-          <div id="version_list" class="modal-body">
-          </div>
-        </div>
-      </div>
-    </div> <!-- End of version select -->
-
-    <!-- Multiple choice -->
-    <div class="modal fade overflow-auto" id="multiple_choice" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title"></h5>
-            <button id="exit_button" type="button" class="close" data-dismiss="modal">
-                <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div id="modal_text" class="px-2"></div>
-            <div id="choice_list"></div>
-          </div>
-        </div>
-      </div>
-  </div> <!-- End of multiple choice -->
-
-    <!-- Instructions -->
-    <div class="modal fade" id="instructions" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">How to use</h5>
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body p-4">
-              <h5>Controls</h5>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>left mouse click</kbd></span>
-                    <span>Add marker / region corner</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>backspace</kbd></span>
-                    <span>Remove last placed region corner</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>esc</kbd></span>
-                    <span>Cancel region creation</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>left mouse double click</kbd></span>
-                    <span>Complete polygon region</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>enter</kbd></span>
-                    <span>Complete polygon region</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>left mouse double click</kbd> <span class="small text-muted">(on region)</span></span>
-                    <span>Edit region vertices</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>right mouse click</kbd> <span class="small text-muted">(on annotation)</span></span>
-                    <span>Edit annotation</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>left mouse drag</kbd> <span class="small text-muted">(on annotation)</span></span>
-                    <span>Drag annotation</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>ctrl</kbd> + <kbd>left mouse click</kbd> <span class="small text-muted">(on annotation)</span></span>
-                    <span>Remove annotation</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>1</kbd>, <kbd>2</kbd> ... <kbd>8</kbd></span>
-                    <span>Change annotation class</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>c</kbd>, <kbd>v</kbd>, <kbd>b</kbd></span>
-                    <span>Change annotation tool</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>z</kbd>, <kbd>x</kbd></span>
-                    <span>Increase/decrease focus</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>ctrl</kbd> + <kbd>mouse wheel</kbd></span>
-                    <span>Increase/decrease focus</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>shift</kbd> + <kbd>mouse wheel</kbd></span>
-                    <span>Rotate image</span>
-                </p>
-                <p class="d-flex justify-content-between">
-                    <span><kbd>mouse wheel</kbd></span>
-                    <span>Zoom in / out</span>
-                </p>
-                <p class="d-flex justify-content-between mb-4">
-                    <span><kbd>left mouse drag</kbd></span>
-                    <span>Pan image</span>
-                </p>
-              <h5>Session</h5>
-              <p>
-                  A collaboration session can be started from the <strong>Session
-                  menu</strong>, which can be opened from the right side of the
-                  page. You can either create a new session or join
-                  an existing one. When collaborating, all participants
-                  see the same annotations and can update them in real time.
-                  By clicking on another collaborator's name in the session
-                  menu, you can move your viewport to match theirs. By
-                  ticking the checkbox next to their name, you can
-                  automatically follow them.
-              </p>
-              <h5>Reverting sessions</h5>
-              <p>
-                  Changes made in a session are automatically stored on
-                  the server. These changes can be reverted by opening
-                  the <strong>Revert changes</strong> menu. This menu
-                  lists the most recent changes made and at what time
-                  they were made. By choosing one of these versions and
-                  clicking the button in the menu, all changes back to
-                  and including the selected version are reverted.
-              </p>
-              <h5>Loading images</h5>
-              <p>
-                  Open the <strong>Image browser</strong> to see a list
-                  of available images on the server. Click one of the
-                  images to view it.
-              </p>
-              <h5>Navigating images</h5>
-              <p>
-                  The image viewer can be navigated with the mouse. The
-                  mouse wheel is used to zoom in and out of the image.
-                  Holding down the left mouse button and dragging it inside
-                  the image viewer pans the image. The focus can be changed
-                  either by pressing the <strong>Up</strong> and <strong>Down</strong>
-                  buttons on the right side of the page, pressing the
-                  <kbd>z</kbd> and <kbd>x</kbd> buttons on the keyboard,
-                  or holding down the <kbd>ctrl</kbd> key while scrolling
-                  the mouse wheel. In addition, the image can be rotated by holding
-                  down the <kbd>shift</kbd> key and scrolling the mouse wheel.
-              </p>
-              <h5>Annotations</h5>
-              <p>
-                  There are three types of annotations that can be added:
-                  markers, rectangles and polygons. To select which type
-                  of annotation should be placed, a tool can be selected
-                  either by pressing the buttons in the menu to the right
-                  or by pressing the <kbd>c</kbd>, <kbd>v</kbd> or <kbd>b</kbd>
-                  keys on the keyboard. To select which class an annotation
-                  should be placed as, press the buttons to the right or
-                  use the number keys. Once an annotation has been placed,
-                  it can be moved by dragging it with the mouse, and it
-                  can be edited and commented on by right clicking it.
-                  Holding down the <kbd>ctrl</kbd> key and clicking an
-                  annotation removes it. The viewport can be moved to
-                  an annotation by clicking the <strong>Move to</strong>
-                  button in the list of annotations on the right.
-              </p>
-              <h6>Markers</h6>
-              <p>
-                  With the marker tool active, you can place markers in
-                  the viewport by clicking with <kbd>left mouse button</kbd>.
-                  In order to interact with a placed marker, the marker
-                  tool has to be active.
-              </p>
-              <h6>Rectangles</h6>
-              <p>
-                  With the rectangle tool active, you can place a rectangular
-                  region by first clicking where one corner of the region
-                  should be, and then clicking where the opposite corner
-                  should be. Once the first corner has been placed, it
-                  can be cancelled by pressing either <kbd>esc</kbd> or
-                  <kbd>backspace</kbd>. In order to interact with a placed
-                  rectangular region, either the rectangle or polygon tool
-                  has to be active.
-              </p>
-              <h6>Polygons</h6>
-              <p>
-                  With the polygon tool active, you can place a polygonal
-                  region by clicking where each corner should be. In order
-                  to complete the region, you can either double click or
-                  press <kbd>enter</kbd>. In order to undo the last placed
-                  corner of the polygon, you can press <kbd>backspace</kbd>,
-                  and in order to cancel the entire polygon, you can press
-                  <kbd>esc</kbd>. In order to interact with a placed
-                  polygonal region, either the rectangle or polygon tool
-                  has to be active.
-              </p>
-              <h5>Saving annotations</h5>
-              <p>
-                  Annotations can be saved to a file on the local machine by
-                  pressing the <strong>Export</strong> button. Annotations
-                  that have been saved can be loaded into the image by
-                  pressing the <strong>Import</strong> button.
-              </p>
-          </div>
-        </div>
-      </div>
-    </div> <!-- End of instructions -->
-
-    <!-- Filter instructions -->
-    <div class="modal fade" id="filter-usage" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Filtering annotations</h5>
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body p-4">
-              <p>
-                  A filter can be used to specify which annotations
-                  are shown in the viewport and annotation list. Filters
-                  can be specified through a combination of keys, values,
-                  comparisons, and combinations. Filtering can also be
-                  used in the same way in the session picker.
-              </p>
-              <h5>Keys</h5>
-                <p>
-                    Keys specify the properties of the annotations that
-                    should be considered when filtering the annotations.
-                    The available keys are:
-                </p>
-                <ul>
-                    <li><code>class</code> &#8211; The class the annotation belongs to.</li>
-                    <li><code>author</code> &#8211; The name of the user who created the annotation.</li>
-                    <li><code>comments</code> &#8211; The number of comments an annotation has.</li>
-                    <li><code>bookmarked</code> &#8211; Whether or not an annotation is bookmarked.</li>
-                    <li><code>region</code> &#8211; Whether or not an annotation is a region.</li>
-                    <li><code>marker</code> &#8211; Whether or not an annotation is a marker.</li>
-                    <li><code>x</code> &#8211; The x position of the annotation's centroid.</li>
-                    <li><code>y</code> &#8211; The y position of the annotation's centroid.</li>
-                    <li><code>z</code> &#8211; The z position of the annotation.</li>
-                    <li><code>prediction</code> &#8211; The class probability of the annotation.</li>
-                </ul>
-                <p>
-                    The session picker uses a different set of keys
-                    for filtering sessions. These keys are:
-                </p>
-                <ul>
-                    <li><code>name</code> &#8211; The name of the session.</li>
-                    <li><code>author</code> &#8211; The name of the user who created the session.</li>
-                    <li><code>created</code> &#8211; The time at which the session was created.</li>
-                    <li><code>updated</code> &#8211; The time of the last update in the session.</li>
-                    <li><code>annotations</code> &#8211; The number of annotations in the session.</li>
-                    <li><code>comments</code> &#8211; The number of comments in the session.</li>
-                    <li><code>users</code> &#8211; The current number of active users in the session.</li>
-                </ul>
-              <h5>Values</h5>
-                <p>
-                    Values specify what the annotation properties should
-                    be compared to in the filter. A value can be a boolean,
-                    in which case it is specified as <code>true</code> or
-                    <code>false</code>, a null object, in which case it is
-                    specified as <code>null</code>, a string, in which case
-                    a quotation mark should be placed on either side of the
-                    value, or a number, which can be either an integer or a
-                    real number. In addition, the value can be specified as
-                    a key, in which case two properties of the annotation are
-                    compared to each other.
-                </p>
-              <h5>Comparisons</h5>
-                <p>
-                    Comparisons specify the relationships between keys
-                    and values that should be fulfilled for an annotation
-                    to pass a filter. The available comparisons are:
-                </p>
-                <ul>
-                    <li><code>[key] &equals; [value]</code> &#8211; A key is exactly equal to a given value.</li>
-                    <li><code>[key] &gt; [value]</code> &#8211; A key is greater than a given value.</li>
-                    <li><code>[key] &lt; [value]</code> &#8211; A key is less than a given value.</li>
-                </ul>
-              <h5>Combinations</h5>
-                <p>
-                    Combinations are used to combine or modify smaller
-                    parts of the filter.  The available combinations are:
-                </p>
-                <ul>
-                    <li><code>[subfilter] AND [subfilter]</code> &#8211; Both subfilters must pass.</li>
-                    <li><code>[subfilter] OR [subfilter]</code> &#8211; One of the subfilters must pass.</li>
-                    <li><code>NOT [subfilter]</code> &#8211; The result of the subfilter is negated.</li>
-                    <li><code>([subfilter])</code> &#8211; The subfilter is evaluated in isolation.</li>
-                </ul>
-              <h5>Examples</h5>
-                <p>
-                    The following examples show some of the filters that
-                    can be specified:
-                </p>
-                <ul>
-                    <li><code>class &equals; "HSIL"</code> &#8211; Annotations belonging to the HSIL class.</li>
-                    <li><code>x &gt; 50000</code> &#8211; Annotations with an x position greater than 50000.</li>
-                    <li><code>NOT author &equals; "Bob"</code> &#8211; Annotations made by people other than Bob.</li>
-                    <li><code>author &equals; "Bob" AND bookmarked &equals; true</code> &#8211; Bookmarked annotations made by Bob.</li>
-                    <li><code>bookmarked &equals; true OR comments &gt; 0</code> &#8211; Annotations that have either been bookmarked or commented on.</li>
-                    <li><code>bookmarked &equals; true AND (class &equals; "Other" OR comments &gt; 0)</code> &#8211; Bookmarked annotations that either have the class "Other" or have been commented on.</li>
-                    <li><code>x &gt; y</code> &#8211; Annotations where the x position is greater than the y position.</li>
-                    <li><code>prediction &equals; null</code> &#8211; Annotations where the prediction has not been defined.</li>
-                </ul>
-          </div>
-        </div>
-      </div>
-  </div> <!-- End of filter instructions -->
-
-    <!-- Collaboration menu -->
-    <div class="modal fade" id="collaboration_menu" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Session</h5>
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-              <div id="collaboration_start">
-                  <div class="form-row pb-4">
-                      <label class="col-3 col-form-label">Username</label>
-                      <div class="col-9">
-                          <input type="text" name="username" class="form-control" placeholder="Your name">
-                      </div>
-                  </div>
-                  <div class="form-row pb-4">
-                      <label class="col-3 col-form-label">Session name</label>
-                      <div class="col-9">
-                          <input type="text" name="collab_name" class="form-control" placeholder="Session name">
-                      </div>
-                  </div>
-                  <h5>Session members</h5>
-                  <div class="card bg-secondary mb-4" style="height: 25vh; overflow-y: auto;">
-                      <div id="collaborator_list" class="list-group list-group-flush">
-                      </div>
-                  </div>
-                  <div class="form-row pb-4">
-                      <div class="col-12">
-                          <div class="input-group">
-                              <input type="text" class="form-control" placeholder="Collaboration URL" readonly name="collab_url" disabled>
-                              <div class="input-group-append">
-                                  <button id="copy_collaboration" type="button" class="btn btn-primary" disabled>Copy URL</button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="form-row pb-2">
-                      <div class="col-12">
-                          <button id="change_session" type="button" class="btn btn-block btn-primary" disabled>
-                              Change session
-                          </button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div> <!-- End of image browser -->
-
-    <!-- Session picker -->
-    <div class="modal fade" id="collab-picker" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Open a new session</h5>
-                    <button id="collab-close-button" type="button" class="close" data-dismiss="modal">
-                        <span>×</span>
-                    </button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-row pb-4">
-                        <div class="col-8">
-                            <input id="collab-new-name" type="text" class="form-control" placeholder="Session name">
-                        </div>
-                        <div class="col-4">
-                            <button id="collab-create" class="btn btn-block btn-primary">Create a new session</button>
-                        </div>
+                <!-- End of toolbar -->
+            </div>
+            <!-- End of row -->
+        </div>
+        <!-- End of container -->
+        <!-- Image browser -->
+        <div class="modal fade" id="image_browser" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="image_browser_title">Select an image</h5>
+                        <!-- Roman - added id -->
+                        <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                        </button>
                     </div>
-                    <div class="form-row pb-4">
-                        <div class="col-12">
-                            <div class="input-group">
-                                <input id="collab-filter-query-input" type="text" class="form-control" placeholder="Filter sessions">
-                                <div id="collab-filter-query-error" class="invalid-feedback">
+                    <div id="available_images" class="modal-body" style="overflow-y: auto; max-height:85vh;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of image browser -->
+        <!-- Version select -->
+        <div class="modal fade" id="version_select" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Select file version</h5>
+                    </div>
+                    <div id="version_list" class="modal-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of version select -->
+        <!-- Multiple choice -->
+        <div class="modal fade overflow-auto" id="multiple_choice" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button id="exit_button" type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modal_text" class="px-2"></div>
+                        <div id="choice_list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of multiple choice -->
+        <!-- Instructions -->
+        <div class="modal fade" id="instructions" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">How to use</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <h5>Controls</h5>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>left mouse click</kbd></span>
+                            <span>Add marker / region corner</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>backspace</kbd></span>
+                            <span>Remove last placed region corner</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>esc</kbd></span>
+                            <span>Cancel region creation</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>left mouse double click</kbd></span>
+                            <span>Complete polygon region</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>enter</kbd></span>
+                            <span>Complete polygon region</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>left mouse double click</kbd> <span class="small text-muted">(on region)</span></span>
+                            <span>Edit region vertices</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>right mouse click</kbd> <span class="small text-muted">(on annotation)</span></span>
+                            <span>Edit annotation</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>left mouse drag</kbd> <span class="small text-muted">(on annotation)</span></span>
+                            <span>Drag annotation</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>ctrl</kbd> + <kbd>left mouse click</kbd> <span class="small text-muted">(on annotation)</span></span>
+                            <span>Remove annotation</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>1</kbd>, <kbd>2</kbd> ... <kbd>8</kbd></span>
+                            <span>Change annotation class</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>c</kbd>, <kbd>v</kbd>, <kbd>b</kbd></span>
+                            <span>Change annotation tool</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>z</kbd>, <kbd>x</kbd></span>
+                            <span>Increase/decrease focus</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>ctrl</kbd> + <kbd>mouse wheel</kbd></span>
+                            <span>Increase/decrease focus</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>shift</kbd> + <kbd>mouse wheel</kbd></span>
+                            <span>Rotate image</span>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span><kbd>mouse wheel</kbd></span>
+                            <span>Zoom in / out</span>
+                        </p>
+                        <p class="d-flex justify-content-between mb-4">
+                            <span><kbd>left mouse drag</kbd></span>
+                            <span>Pan image</span>
+                        </p>
+                        <h5>Session</h5>
+                        <p>
+                            A collaboration session can be started from the <strong>Session
+                            menu</strong>, which can be opened from the right side of the
+                            page. You can either create a new session or join
+                            an existing one. When collaborating, all participants
+                            see the same annotations and can update them in real time.
+                            By clicking on another collaborator's name in the session
+                            menu, you can move your viewport to match theirs. By
+                            ticking the checkbox next to their name, you can
+                            automatically follow them.
+                        </p>
+                        <h5>Reverting sessions</h5>
+                        <p>
+                            Changes made in a session are automatically stored on
+                            the server. These changes can be reverted by opening
+                            the <strong>Revert changes</strong> menu. This menu
+                            lists the most recent changes made and at what time
+                            they were made. By choosing one of these versions and
+                            clicking the button in the menu, all changes back to
+                            and including the selected version are reverted.
+                        </p>
+                        <h5>Loading images</h5>
+                        <p>
+                            Open the <strong>Image browser</strong> to see a list
+                            of available images on the server. Click one of the
+                            images to view it.
+                        </p>
+                        <h5>Navigating images</h5>
+                        <p>
+                            The image viewer can be navigated with the mouse. The
+                            mouse wheel is used to zoom in and out of the image.
+                            Holding down the left mouse button and dragging it inside
+                            the image viewer pans the image. The focus can be changed
+                            either by pressing the <strong>Up</strong> and <strong>Down</strong>
+                            buttons on the right side of the page, pressing the
+                            <kbd>z</kbd> and <kbd>x</kbd> buttons on the keyboard,
+                            or holding down the <kbd>ctrl</kbd> key while scrolling
+                            the mouse wheel. In addition, the image can be rotated by holding
+                            down the <kbd>shift</kbd> key and scrolling the mouse wheel.
+                        </p>
+                        <h5>Annotations</h5>
+                        <p>
+                            There are three types of annotations that can be added:
+                            markers, rectangles and polygons. To select which type
+                            of annotation should be placed, a tool can be selected
+                            either by pressing the buttons in the menu to the right
+                            or by pressing the <kbd>c</kbd>, <kbd>v</kbd> or <kbd>b</kbd>
+                            keys on the keyboard. To select which class an annotation
+                            should be placed as, press the buttons to the right or
+                            use the number keys. Once an annotation has been placed,
+                            it can be moved by dragging it with the mouse, and it
+                            can be edited and commented on by right clicking it.
+                            Holding down the <kbd>ctrl</kbd> key and clicking an
+                            annotation removes it. The viewport can be moved to
+                            an annotation by clicking the <strong>Move to</strong>
+                            button in the list of annotations on the right.
+                        </p>
+                        <h6>Markers</h6>
+                        <p>
+                            With the marker tool active, you can place markers in
+                            the viewport by clicking with <kbd>left mouse button</kbd>.
+                            In order to interact with a placed marker, the marker
+                            tool has to be active.
+                        </p>
+                        <h6>Rectangles</h6>
+                        <p>
+                            With the rectangle tool active, you can place a rectangular
+                            region by first clicking where one corner of the region
+                            should be, and then clicking where the opposite corner
+                            should be. Once the first corner has been placed, it
+                            can be cancelled by pressing either <kbd>esc</kbd> or
+                            <kbd>backspace</kbd>. In order to interact with a placed
+                            rectangular region, either the rectangle or polygon tool
+                            has to be active.
+                        </p>
+                        <h6>Polygons</h6>
+                        <p>
+                            With the polygon tool active, you can place a polygonal
+                            region by clicking where each corner should be. In order
+                            to complete the region, you can either double click or
+                            press <kbd>enter</kbd>. In order to undo the last placed
+                            corner of the polygon, you can press <kbd>backspace</kbd>,
+                            and in order to cancel the entire polygon, you can press
+                            <kbd>esc</kbd>. In order to interact with a placed
+                            polygonal region, either the rectangle or polygon tool
+                            has to be active.
+                        </p>
+                        <h5>Saving annotations</h5>
+                        <p>
+                            Annotations can be saved to a file on the local machine by
+                            pressing the <strong>Export</strong> button. Annotations
+                            that have been saved can be loaded into the image by
+                            pressing the <strong>Import</strong> button.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of instructions -->
+        <!-- Filter instructions -->
+        <div class="modal fade" id="filter-usage" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Filtering annotations</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <p>
+                            A filter can be used to specify which annotations
+                            are shown in the viewport and annotation list. Filters
+                            can be specified through a combination of keys, values,
+                            comparisons, and combinations. Filtering can also be
+                            used in the same way in the session picker.
+                        </p>
+                        <h5>Keys</h5>
+                        <p>
+                            Keys specify the properties of the annotations that
+                            should be considered when filtering the annotations.
+                            The available keys are:
+                        </p>
+                        <ul>
+                            <li><code>class</code> &#8211; The class the annotation belongs to.</li>
+                            <li><code>author</code> &#8211; The name of the user who created the annotation.</li>
+                            <li><code>comments</code> &#8211; The number of comments an annotation has.</li>
+                            <li><code>bookmarked</code> &#8211; Whether or not an annotation is bookmarked.</li>
+                            <li><code>region</code> &#8211; Whether or not an annotation is a region.</li>
+                            <li><code>marker</code> &#8211; Whether or not an annotation is a marker.</li>
+                            <li><code>x</code> &#8211; The x position of the annotation's centroid.</li>
+                            <li><code>y</code> &#8211; The y position of the annotation's centroid.</li>
+                            <li><code>z</code> &#8211; The z position of the annotation.</li>
+                            <li><code>prediction</code> &#8211; The class probability of the annotation.</li>
+                        </ul>
+                        <p>
+                            The session picker uses a different set of keys
+                            for filtering sessions. These keys are:
+                        </p>
+                        <ul>
+                            <li><code>name</code> &#8211; The name of the session.</li>
+                            <li><code>author</code> &#8211; The name of the user who created the session.</li>
+                            <li><code>created</code> &#8211; The time at which the session was created.</li>
+                            <li><code>updated</code> &#8211; The time of the last update in the session.</li>
+                            <li><code>annotations</code> &#8211; The number of annotations in the session.</li>
+                            <li><code>comments</code> &#8211; The number of comments in the session.</li>
+                            <li><code>users</code> &#8211; The current number of active users in the session.</li>
+                        </ul>
+                        <h5>Values</h5>
+                        <p>
+                            Values specify what the annotation properties should
+                            be compared to in the filter. A value can be a boolean,
+                            in which case it is specified as <code>true</code> or
+                            <code>false</code>, a null object, in which case it is
+                            specified as <code>null</code>, a string, in which case
+                            a quotation mark should be placed on either side of the
+                            value, or a number, which can be either an integer or a
+                            real number. In addition, the value can be specified as
+                            a key, in which case two properties of the annotation are
+                            compared to each other.
+                        </p>
+                        <h5>Comparisons</h5>
+                        <p>
+                            Comparisons specify the relationships between keys
+                            and values that should be fulfilled for an annotation
+                            to pass a filter. The available comparisons are:
+                        </p>
+                        <ul>
+                            <li><code>[key] &equals; [value]</code> &#8211; A key is exactly equal to a given value.</li>
+                            <li><code>[key] &gt; [value]</code> &#8211; A key is greater than a given value.</li>
+                            <li><code>[key] &lt; [value]</code> &#8211; A key is less than a given value.</li>
+                        </ul>
+                        <h5>Combinations</h5>
+                        <p>
+                            Combinations are used to combine or modify smaller
+                            parts of the filter.  The available combinations are:
+                        </p>
+                        <ul>
+                            <li><code>[subfilter] AND [subfilter]</code> &#8211; Both subfilters must pass.</li>
+                            <li><code>[subfilter] OR [subfilter]</code> &#8211; One of the subfilters must pass.</li>
+                            <li><code>NOT [subfilter]</code> &#8211; The result of the subfilter is negated.</li>
+                            <li><code>([subfilter])</code> &#8211; The subfilter is evaluated in isolation.</li>
+                        </ul>
+                        <h5>Examples</h5>
+                        <p>
+                            The following examples show some of the filters that
+                            can be specified:
+                        </p>
+                        <ul>
+                            <li><code>class &equals; "HSIL"</code> &#8211; Annotations belonging to the HSIL class.</li>
+                            <li><code>x &gt; 50000</code> &#8211; Annotations with an x position greater than 50000.</li>
+                            <li><code>NOT author &equals; "Bob"</code> &#8211; Annotations made by people other than Bob.</li>
+                            <li><code>author &equals; "Bob" AND bookmarked &equals; true</code> &#8211; Bookmarked annotations made by Bob.</li>
+                            <li><code>bookmarked &equals; true OR comments &gt; 0</code> &#8211; Annotations that have either been bookmarked or commented on.</li>
+                            <li><code>bookmarked &equals; true AND (class &equals; "Other" OR comments &gt; 0)</code> &#8211; Bookmarked annotations that either have the class "Other" or have been commented on.</li>
+                            <li><code>x &gt; y</code> &#8211; Annotations where the x position is greater than the y position.</li>
+                            <li><code>prediction &equals; null</code> &#8211; Annotations where the prediction has not been defined.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of filter instructions -->
+        <!-- Collaboration menu -->
+        <div class="modal fade" id="collaboration_menu" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Session</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="collaboration_start">
+                            <div class="form-row pb-4">
+                                <label class="col-3 col-form-label">Username</label>
+                                <div class="col-9">
+                                    <input type="text" name="username" class="form-control" placeholder="Your name">
                                 </div>
-                                <div id="collab-filter-query-info" class="valid-feedback">
+                            </div>
+                            <div class="form-row pb-4">
+                                <label class="col-3 col-form-label">Session name</label>
+                                <div class="col-9">
+                                    <input type="text" name="collab_name" class="form-control" placeholder="Session name">
+                                </div>
+                            </div>
+                            <h5>Session members</h5>
+                            <div class="card bg-secondary mb-4" style="height: 25vh; overflow-y: auto;">
+                                <div id="collaborator_list" class="list-group list-group-flush">
+                                </div>
+                            </div>
+                            <div class="form-row pb-4">
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Collaboration URL" readonly name="collab_url" disabled>
+                                        <div class="input-group-append">
+                                            <button id="copy_collaboration" type="button" class="btn btn-primary" disabled>Copy URL</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row pb-2">
+                                <div class="col-12">
+                                    <button id="change_session" type="button" class="btn btn-block btn-primary" disabled>
+                                    Change session
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted">Current image:&nbsp;&nbsp;&nbsp;<span id="collab-image-path">image_name</span></p>
-                    <div id="collab-list-container" class="card bg-secondary" style="height: 40vh; overflow-y: auto;">
-                        <table id="collab-list" class="table table-striped table-hover text-center bg-white">
-                        </table>
-                    </div>
-                    <div class="form-row pt-4">
-                        <div class="col-12 d-flex justify-content-between">
-                            <button id="collab-list-refresh" class="btn btn-link">Refresh</button>
-                            <button id="collab-open" class="btn btn-primary" disabled="">Open</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-    </div> <!-- End of session picker -->
-
-    <!-- Version picker -->
-    <div class="modal fade" id="version-picker" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Revert to an older version</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+        <!-- End of image browser -->
+        <!-- Session picker -->
+        <div class="modal fade" id="collab-picker" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Open a new session</h5>
+                        <button id="collab-close-button" type="button" class="close" data-dismiss="modal">
                         <span>×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="card bg-secondary" style="height: 60vh; overflow-y: auto;">
-                        <div id="version-list" class="list-group list-group-flush">
-                        </div>
+                        </button>
                     </div>
-                    <div class="form-row pt-4">
-                        <div class="col-12 d-flex justify-content-between">
-                            <button id="version-refresh" class="btn btn-link">Refresh</button>
-                            <button id="version-revert" class="btn btn-primary" disabled="">Revert to version</button>
+                    <div class="modal-body">
+                        <div class="form-row pb-4">
+                            <div class="col-8">
+                                <input id="collab-new-name" type="text" class="form-control" placeholder="Session name">
+                            </div>
+                            <div class="col-4">
+                                <button id="collab-create" class="btn btn-block btn-primary">Create a new session</button>
+                            </div>
+                        </div>
+                        <div class="form-row pb-4">
+                            <div class="col-12">
+                                <div class="input-group">
+                                    <input id="collab-filter-query-input" type="text" class="form-control" placeholder="Filter sessions">
+                                    <div id="collab-filter-query-error" class="invalid-feedback">
+                                    </div>
+                                    <div id="collab-filter-query-info" class="valid-feedback">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-muted">Current image:&nbsp;&nbsp;&nbsp;<span id="collab-image-path">image_name</span></p>
+                        <div id="collab-list-container" class="card bg-secondary" style="height: 40vh; overflow-y: auto;">
+                            <table id="collab-list" class="table table-striped table-hover text-center bg-white">
+                            </table>
+                        </div>
+                        <div class="form-row pt-4">
+                            <div class="col-12 d-flex justify-content-between">
+                                <button id="collab-list-refresh" class="btn btn-link">Refresh</button>
+                                <button id="collab-open" class="btn btn-primary" disabled="">Open</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> <!-- End of version picker -->
-
-    <!-- Context menu -->
-    <div id="context_menu" class="card position-absolute fade" style="width: 25rem; max-width: 80%; pointer-events: none; z-index: 500;" tabindex="-1">
-        <div class="card-header">
-            <span id="context_menu_title">Edit annotation</span>
-            <button id="close_context_menu" class="close" type="button">
+        <!-- End of session picker -->
+        <!-- Version picker -->
+        <div class="modal fade" id="version-picker" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Revert to an older version</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                        <span>×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card bg-secondary" style="height: 60vh; overflow-y: auto;">
+                            <div id="version-list" class="list-group list-group-flush">
+                            </div>
+                        </div>
+                        <div class="form-row pt-4">
+                            <div class="col-12 d-flex justify-content-between">
+                                <button id="version-refresh" class="btn btn-link">Refresh</button>
+                                <button id="version-revert" class="btn btn-primary" disabled="">Revert to version</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of version picker -->
+        <!-- Context menu -->
+        <div id="context_menu" class="card position-absolute fade" style="width: 25rem; max-width: 80%; pointer-events: none; z-index: 500;" tabindex="-1">
+            <div class="card-header">
+                <span id="context_menu_title">Edit annotation</span>
+                <button id="close_context_menu" class="close" type="button">
                 <span>&times;</span>
-            </button>
+                </button>
+            </div>
+            <div class="card-body">
+            </div>
         </div>
-        <div class="card-body">
-        </div>
-    </div>
-    <!-- End of context menu -->
-
-</body>
-
-<!-- @Roman - add surveyHandler js script -->
-<script src="js/surveyHandler.js"></script>
-<script src="js/bootstrap/bootstrap.4.0.0.bundle.min.js" ></script>
-<script src="js/bootstrap/bootstrap-slider.min.js" ></script>
-<script src="js/openseadragon/openseadragon.2.4.0.min.js"></script>
-<script src="js/openseadragon/openseadragon-focus-levels.js"></script>
-<script src="js/openseadragon/openseadragon-viewerinputhook.js"></script>
-<!-- <script src="js/openseadragon/openseadragon-filtering.js"></script> -->
-<script src="js/openseadragon/openseadragon-svg-overlay.js"></script>
-<script src="js/openseadragon/openseadragon-scalebar.js"></script>
-<script src="defaultClassConfig.js"></script>
-<script src="js/utils/classUtils.js"></script>
-<script src="js/utils/dateUtils.js"></script>
-<script src="js/utils/mathUtils.js"></script>
-<script src="js/utils/htmlUtils.js"></script>
-<script src="js/versionRevert.js"></script>
-<script src="js/collabClient.js"></script>
-<script src="js/collabPicker.js"></script>
-<script src="js/globalDataHandler.js"></script>
-<script src="js/metadataHandler.js"></script>
-<script src="js/annotationHandler.js"></script>
-<script src="js/overlayHandler.js"></script>
-<script src="js/regionEditor.js"></script>
-<script src="js/tmappUI.js"></script>
-<script src="js/tmapp.js"></script>
-<script src="js/filters.js"></script>
-<script src="js/annotationVisuals.js"></script>
-<script src="js/annotationStorageConversion.js"></script>
-<script src="js/coordinateHelper.js"></script>
-<script src="js/localStorage.js"></script>
-<script src="js/userInfo.js"></script>
-<script src="js/cssHelper.js"></script>
-<script src="js/commentSection.js"></script>
-<script src="js/sortableList.js"></script>
-<script src="js/htmlHelper.js"></script>
-<script src="js/annotationTool.js"></script>
-
-<script>
-    function noArrows() {
-        switch( event.keyCode ){
-            case 37://left arrow
-            case 38://up arrow
-            case 39://right arrow
-            case 40://down arrow
-                event.preventDefault();
-                break;
+        <!-- End of context menu -->
+    </body>
+    <!-- @Roman - add surveyHandler js script -->
+    <script src="js/surveyHandler.js"></script>
+    <script src="js/bootstrap/bootstrap.4.0.0.bundle.min.js" ></script>
+    <script src="js/bootstrap/bootstrap-slider.min.js" ></script>
+    <script src="js/openseadragon/openseadragon.2.4.0.min.js"></script>
+    <script src="js/openseadragon/openseadragon-focus-levels.js"></script>
+    <script src="js/openseadragon/openseadragon-viewerinputhook.js"></script>
+    <!-- <script src="js/openseadragon/openseadragon-filtering.js"></script> -->
+    <script src="js/openseadragon/openseadragon-svg-overlay.js"></script>
+    <script src="js/openseadragon/openseadragon-scalebar.js"></script>
+    <script src="defaultClassConfig.js"></script>
+    <script src="js/utils/classUtils.js"></script>
+    <script src="js/utils/dateUtils.js"></script>
+    <script src="js/utils/mathUtils.js"></script>
+    <script src="js/utils/htmlUtils.js"></script>
+    <script src="js/versionRevert.js"></script>
+    <script src="js/collabClient.js"></script>
+    <script src="js/collabPicker.js"></script>
+    <script src="js/globalDataHandler.js"></script>
+    <script src="js/metadataHandler.js"></script>
+    <script src="js/annotationHandler.js"></script>
+    <script src="js/overlayHandler.js"></script>
+    <script src="js/regionEditor.js"></script>
+    <script src="js/tmappUI.js"></script>
+    <script src="js/tmapp.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/annotationVisuals.js"></script>
+    <script src="js/annotationStorageConversion.js"></script>
+    <script src="js/coordinateHelper.js"></script>
+    <script src="js/localStorage.js"></script>
+    <script src="js/userInfo.js"></script>
+    <script src="js/cssHelper.js"></script>
+    <script src="js/commentSection.js"></script>
+    <script src="js/sortableList.js"></script>
+    <script src="js/htmlHelper.js"></script>
+    <script src="js/annotationTool.js"></script>
+    <script>
+        function noArrows() {
+            switch( event.keyCode ){
+                case 37://left arrow
+                case 38://up arrow
+                case 39://right arrow
+                case 40://down arrow
+                    event.preventDefault();
+                    break;
+            }
         }
-    }
-</script>
-<script>
-    // Store path to server api (if not at the domain root)
-    window.location.dirname = window.location.pathname.replace(/\/[^/]*$/,''); // Remove last '/' and everything following
-    window.location.base = window.location.origin + window.location.dirname;
-    window.location.api = window.location.base + '/api';
-
-    // Uses window.location.base for remoteStorage
-    tmappUI.initUI();
-
-    // Handle browser history.back/forward()
-    window.onpopstate = function(event) {
-        $('.modal').modal('hide'); //close all modals
-        tmappUI.setOverwriteURL(true); //state already on history
-        tmapp.processURL(document.location);
-    };
-
-    // Start our tmapp
-    $(document).ready(() => {
-
-        // Only way I manage to get correct size navbar on vertical phone layout (due to zoom, content is wider than 100%)!
-        function resizeNavbar() {
-            document.getElementById("navbar").style.width = `${Math.max(document.getElementById("main_row").clientWidth,document.body.clientWidth)}px`;
-            // console.log(`${Math.max(document.getElementById("main_row").clientWidth,document.body.clientWidth)}px`);
-        }
-        window.addEventListener('resize', resizeNavbar);
-
-        // Options when initializing tmapp
-        const tmappOptions = {};
-        const {imageName, collab, state}=tmapp.parseURL(new URL(window.location.href));
-
-        if (imageName !== null) {
-            tmappOptions.imageName = imageName;
-        }
-        if (collab !== null) {
-            tmappOptions.collab = collab;
-        }
-
-        // Check if full state is present
-        const values = Object.values(state);
-        const stateDefined = values.every(value => value !== null);
-
-        // Set the initial state if defined
-        if (stateDefined) {
-            // Convert to numbers first
-    	    for (const [key, value] of Object.entries(state)) {
-                    state[key] = Number(value);
-    	    }
-            tmappOptions.initialState = state;
-        }
-
-        // Initialize tmapp
-        tmapp.init(tmappOptions);
-        resizeNavbar();
-    });
-</script>
+    </script>
+    <script>
+        // Store path to server api (if not at the domain root)
+        window.location.dirname = window.location.pathname.replace(/\/[^/]*$/,''); // Remove last '/' and everything following
+        window.location.base = window.location.origin + window.location.dirname;
+        window.location.api = window.location.base + '/api';
+        
+        // Uses window.location.base for remoteStorage
+        tmappUI.initUI();
+        
+        // Handle browser history.back/forward()
+        window.onpopstate = function(event) {
+            $('.modal').modal('hide'); //close all modals
+            tmappUI.setOverwriteURL(true); //state already on history
+            tmapp.processURL(document.location);
+        };
+        
+        // Start our tmapp
+        $(document).ready(() => {
+        
+            // Only way I manage to get correct size navbar on vertical phone layout (due to zoom, content is wider than 100%)!
+            function resizeNavbar() {
+                document.getElementById("navbar").style.width = `${Math.max(document.getElementById("main_row").clientWidth,document.body.clientWidth)}px`;
+                // console.log(`${Math.max(document.getElementById("main_row").clientWidth,document.body.clientWidth)}px`);
+            }
+            window.addEventListener('resize', resizeNavbar);
+        
+            // Options when initializing tmapp
+            const tmappOptions = {};
+            const {imageName, collab, state}=tmapp.parseURL(new URL(window.location.href));
+        
+            if (imageName !== null) {
+                tmappOptions.imageName = imageName;
+            }
+            if (collab !== null) {
+                tmappOptions.collab = collab;
+            }
+        
+            // Check if full state is present
+            const values = Object.values(state);
+            const stateDefined = values.every(value => value !== null);
+        
+            // Set the initial state if defined
+            if (stateDefined) {
+                // Convert to numbers first
+        	    for (const [key, value] of Object.entries(state)) {
+                        state[key] = Number(value);
+        	    }
+                tmappOptions.initialState = state;
+            }
+        
+            // Initialize tmapp
+            tmapp.init(tmappOptions);
+            resizeNavbar();
+        });
+    </script>
 </html>
