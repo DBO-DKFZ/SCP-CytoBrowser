@@ -68,40 +68,40 @@ function extractImportantMetadata(jsonData) {
  * Also get survey answer if the file exists.
  */
 function getMetadataForImage(imageName) {
+
+    const filename = `${jsonDir}/${imageName}.json`;
+    let data = {};
     
-    // @Roman - do not want to cache metadata as our metadata includes
-    // survey answers and is therefore not static. If cached, we would not get updates. 
-    if (false) { // metadataCache[imageName]
-        return metadataCache[imageName];
+    // load metadata (technical and patient)
+    try {
+        data = JSON.parse(fs.readFileSync(filename));
+        console.log(`Loading metadata from ${filename}`);
     }
-    else {
-        const filename = `${jsonDir}/${imageName}.json`;
-        try {
-            const data = JSON.parse(fs.readFileSync(filename));
-            data["surveyAnswer"] = autosave.loadSurveyAnswer(imageName);
-            console.log("surveyAnswer from getMetadataForImage()");
-            console.log(data["surveyAnswer"]);
-            
-            // Continue here
-            console.log(`Loading metadata from ${filename}`);
-            
-            metadataCache[imageName] = data;
-            setTimeout(() =>
-                delete metadataCache[imageName],
-                metadataExpirationTime
-            );
-            return data;
+    catch (e) {
+        if (e.code === "ENOENT") {
+            console.log(`No metadata file: ${filename}`);
         }
-        catch (e) {
-            if (e.code === "ENOENT") {
-                console.log(`No metadata file: ${filename}`);
-                return {};
-            }
-            else {
-                throw e;
-            }
+        else {
+            throw e;
         }
     }
+    
+    // load survey answer 
+    try {
+        data["surveyAnswer"] = autosave.loadSurveyAnswer(imageName);
+        console.log(`Loading survey answer for ${imageName}`);
+    }
+    catch (e) {
+        if (e.code === "ENOENT") {
+            data["surveyAnswer"] = {};
+            console.log(`No survey answer file for: ${imageName}`);
+        }
+        else {
+            throw e;
+        }
+    }
+
+    return data;
 }
 
 function main() {
