@@ -744,6 +744,19 @@ const tmapp = (function() {
     function getImageName() {
         return _currentImage && _currentImage.name;
     }
+    
+    /**
+     * Roman - added function
+     * Get the names of all available images.
+     * @returns a list containing all available image names.
+     */
+    function getImageNames() {
+        let imageNames = [];
+         Object.values(_images).forEach(image => {
+             imageNames.push(image.name)
+         });
+        return imageNames;
+    }
 
     /**
      * Update the current status of tmapp, viewport position and cursor
@@ -844,7 +857,12 @@ const tmapp = (function() {
             throw new Error ("Tried to adjust scalebar without a viewer.");
         }
     }
+    
 
+    /**
+     * @ Roman - modified
+     * added export for 'getImageNames'
+     */
     return {
         init,
         openImage,
@@ -879,6 +897,8 @@ const tmapp = (function() {
         keyDownHandler,
         mouseHandler,
 
-        updateScalebar
+        updateScalebar,
+        
+        getImageNames,
     };
 })();

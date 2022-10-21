@@ -484,14 +484,6 @@ const tmappUI = (function(){
      * To show the survey status (progress) as well. 
      */
     function _initImageBrowserModal() {
-        //surveyHandler.updateSurveyStatus();
-        // $("#image_browser_btn1").click(() => {
-        //     surveyHandler.updateSurveyStatus();
-        // });
-        // $("#image_browser_btn2").click(() => {
-        //     surveyHandler.updateSurveyStatus(); 
-        // });
-        
         $("#image_browser").on('shown.bs.modal', function () {
             surveyHandler.updateSurveyStatus(); 
         });
@@ -511,14 +503,22 @@ const tmappUI = (function(){
         $("#surveyForm :input").change(function() {
             surveyHandler.setSaved(false);
         });
+        
+        $("#surveyPrevBtn").click(() => {
+            surveyHandler.openAdjacentImage(false);
+        });
+        
+        $("#surveyNextBtn").click(() => {
+            surveyHandler.openAdjacentImage(true);
+        });
     }
-
+    
     /**
      * Initialize UI components that need to be added programatically
      * and add any event handlers that are needed.
      *
      * @Roman - modified
-     * added '_initSurveyCommentSection', '_initImageBrowserButtons' and '_initSurvey'
+     * added '_initSurveyCommentSection', '_initImageBrowserModal', '_initSurvey'
      */
     function initUI() {
         _initAnnotationList();

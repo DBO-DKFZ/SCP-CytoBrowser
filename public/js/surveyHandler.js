@@ -134,7 +134,32 @@ const surveyHandler = (function (){
         // mark survey state as saved
         setSaved(true);
     };
+    
+    /**
+     * Open adjacent (previous/next) image
+     */
+    function openAdjacentImage(openNext=true){
 
+        let imageNames = tmapp.getImageNames()
+        let currentImageName = tmapp.getImageName()
+   
+        let currentIdx = imageNames.indexOf(currentImageName);        
+        if (currentIdx === -1) {
+            console.log(`Image ${currentImageName} cannot be found`);
+            return;
+        }
+
+        let adjacentIdx = openNext ? ++currentIdx : --currentIdx;
+        
+        let adjacentImageName = imageNames[adjacentIdx];
+        if (adjacentImageName === undefined) {
+            console.log(`Reached start/end of list and cannot go back/forth`);
+            return
+        }
+        
+        collabPicker.open(adjacentImageName, false, false);        
+    }
+    
     
     return {
         resetSurveyForm,
@@ -143,6 +168,7 @@ const surveyHandler = (function (){
         setSaved,
         updateSurveyStatus,
         saveSurveyAnswer,
+        openAdjacentImage,
     };
 })();
 
