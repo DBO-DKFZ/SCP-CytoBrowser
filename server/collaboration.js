@@ -467,39 +467,46 @@ class Collaboration {
         autosave.saveSurveyAnswer(this.image, this.surveyAnswer)
     }
 
+    /**
+     * @Roman - modified
+     * Do not care about autosaving and stuff. 
+     * Just clutters the server and leads to confusion so we disable it
+     */
     saveState() {
-        if (this.hasUnsavedChanges) {
-            const updateTime = getCurrentTimeAsString();
-            const data = { //Format specification (less canonicalized, order is important)
-                version: "1.1",
-                id: this.id,
-                name: this.name,
-                image: this.image,
-                author: this.author,
-                createdOn: this.createdOn,
-                updatedOn: updateTime,
-                nAnnotations: this.annotations.length,
-                nComments: this.comments.length,
-                classConfig: this.classConfig,
-                annotations: this.annotations,
-                comments: this.comments
-            };
-            return autosave.saveAnnotations(this.id, this.image, data).then(() => {
-                this.notifyAutosave();
-                this.updatedOn = updateTime;
-                this.hasUnsavedChanges = false; //FIX: changes during save will be lost
-                return true;
-            });
-        }
-        else {
-            return Promise.resolve(false);
-        }
+        return Promise.resolve(false);
+        // if (this.hasUnsavedChanges) {
+        //     const updateTime = getCurrentTimeAsString();
+        //     const data = { //Format specification (less canonicalized, order is important)
+        //         version: "1.1",
+        //         id: this.id,
+        //         name: this.name,
+        //         image: this.image,
+        //         author: this.author,
+        //         createdOn: this.createdOn,
+        //         updatedOn: updateTime,
+        //         nAnnotations: this.annotations.length,
+        //         nComments: this.comments.length,
+        //         classConfig: this.classConfig,
+        //         annotations: this.annotations,
+        //         comments: this.comments
+        //     };
+        //     return autosave.saveAnnotations(this.id, this.image, data).then(() => {
+        //         this.notifyAutosave();
+        //         this.updatedOn = updateTime;
+        //         this.hasUnsavedChanges = false; //FIX: changes during save will be lost
+        //         return true;
+        //     });
+        // }
+        // else {
+        //     return Promise.resolve(false);
+        // }
     }
 
     flagUnsavedChanges() {
         this.hasUnsavedChanges = true;
     }
 
+    
     trySavingState() {
         if (this.autosaveTimeout) { // Repeated tries, then just reset timer
             clearTimeout(this.autosaveTimeout);

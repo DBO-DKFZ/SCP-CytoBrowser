@@ -265,9 +265,19 @@ const collabClient = (function(){
         _resolveOngoingDestruction && _resolveOngoingDestruction();
     }
 
+    /**
+     * @Roman - modified
+     * When we get a disconnect error, calling _attemptReconnect() as is does not work.
+     * Probably has something to do with the collaboration IDs and stuff. Since we don't
+     * care about that, we just do a hard reload of the page. 
+     * Otherwise it looks like the reconnect has worked (error only shown in console), 
+     * but the user actually does not get any serer updates i.e. cannot save survey answers
+     * and does not see patient metadata upon switching images. 
+     */
     function _attemptReconnect() {
         console.info(`Attempting to reconnect to ${_collabId}.`);
-        connect(_collabId, getDefaultName(), false);
+        location.reload();
+        // connect(_collabId, getDefaultName(), false);
     }
 
     function _promptReconnect(title) {
@@ -459,6 +469,10 @@ const collabClient = (function(){
     }
 
     /**
+     * @Roman - modified function 
+     * Deal with error 'WebSocket is already in CLOSING or CLOSED state'
+     * https://stackoverflow.com/questions/48472977/how-to-catch-and-deal-with-websocket-is-already-in-closing-or-closed-state-in
+     *
      * Send a message to the currently ongoing collaboration so it can
      * be handled by the server.
      * @param {Object} msg Message to be sent.
@@ -470,13 +484,23 @@ const collabClient = (function(){
                 _postponeIdle();
             }
             if (typeof(msg) === "object") {
+                if (!isOpen(_ws)) return;
                 _ws.send(JSON.stringify(msg));
             }
             else {
+                if (!isOpen(_ws)) return;
                 _ws.send(msg);
             }
         }
     }
+    
+    /**
+     * @Roman - added function
+     * Deal with error 'WebSocket is already in CLOSING or CLOSED state'
+     * https://stackoverflow.com/questions/48472977/how-to-catch-and-deal-with-websocket-is-already-in-closing-or-closed-state-in
+     */
+    function isOpen(ws) { return ws.readyState === ws.OPEN }
+
 
     /**
      * Notify collaborators that you are moving to another image.
@@ -803,6 +827,6 @@ const collabClient = (function(){
         stopFollowing,
         getVersions,
         revertVersion,
-        addSurveyAnswer
+        addSurveyAnswer,
     };
 })();
