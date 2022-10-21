@@ -55,7 +55,7 @@ function getSurveyStatus() {
     surveyStatus.nOfQuestions = nOfQuestions;
     surveyStatus.nOfCompletedQuestions = nOfCompletedQuestions;
     surveyStatus.nOfRemainingQuestions = nOfRemainingQuestions;
-    surveyStatus.pctComplete = Math.trunc(pctComplete);
+    surveyStatus.pctComplete = Math.floor(pctComplete);
 
     console.log(surveyStatus);
     console.assert(nOfQuestions === nOfCompletedQuestions + nOfRemainingQuestions, 
