@@ -202,9 +202,13 @@ const surveyHandler = (function (){
     /**
      * Ensures that next/previous buttons are set upon page reload
      */
-    window.onload = function() {
+    // window.onload = function() {
+    //     setNextPrevBtnAccess();
+    // }
+    window.addEventListener('load', 
+      function() { 
         setNextPrevBtnAccess();
-    }
+      }, false);
 
     return {
         resetSurveyForm,
