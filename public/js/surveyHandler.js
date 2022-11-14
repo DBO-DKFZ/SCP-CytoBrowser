@@ -166,7 +166,6 @@ const surveyHandler = (function (){
      * Sets button accessibility (enabled or disabled) for the next and previous buttons.
      */
     function setNextPrevBtnAccess() {
-        
         // next image button
         let nextImage = getAdjacentImage(true);
         if (nextImage === undefined) {
@@ -202,9 +201,6 @@ const surveyHandler = (function (){
     /**
      * Ensures that next/previous buttons are set upon page reload
      */
-    // window.onload = function() {
-    //     setNextPrevBtnAccess();
-    // }
     window.addEventListener('load', 
       function() { 
         setNextPrevBtnAccess();
