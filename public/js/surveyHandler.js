@@ -28,8 +28,10 @@ const surveyHandler = (function (){
         saved = value
         if (saved === true) {
             document.getElementById("surveySaveState").innerHTML = "Saved";
+            document.getElementById("surveyFormSaveBtn").disabled = true;
         } else {
-            document.getElementById("surveySaveState").innerHTML = "Unsaved";
+            document.getElementById("surveySaveState").innerHTML = "*Unsaved";
+            document.getElementById("surveyFormSaveBtn").disabled = false;
         }
     }
     
@@ -136,31 +138,74 @@ const surveyHandler = (function (){
     };
     
     /**
-     * Open adjacent (previous/next) image
+     * Gets the name of adjacent (previous or next) image
+     * If no image is adjacent, undefined is returned.
+     * @param {boolean} getNext If true, the next image is returned, otherwise the previous image is returned.
      */
-    function openAdjacentImage(openNext=true){
+    function getAdjacentImage(getNext=true){
 
         let imageNames = tmapp.getImageNames()
         let currentImageName = tmapp.getImageName()
-   
+        
         let currentIdx = imageNames.indexOf(currentImageName);        
         if (currentIdx === -1) {
             console.log(`Image ${currentImageName} cannot be found`);
             return;
         }
 
-        let adjacentIdx = openNext ? ++currentIdx : --currentIdx;
-        
+        let adjacentIdx = getNext ? ++currentIdx : --currentIdx;
         let adjacentImageName = imageNames[adjacentIdx];
         if (adjacentImageName === undefined) {
-            console.log(`Reached start/end of list and cannot go back/forth`);
-            return
-        }
-        
-        collabPicker.open(adjacentImageName, false, false);        
+            return;
+        } 
+
+        return adjacentImageName;
     }
     
+    /**
+     * Sets button accessibility (enabled or disabled) for the next and previous buttons.
+     */
+    function setNextPrevBtnAccess() {
+        
+        // next image button
+        let nextImage = getAdjacentImage(true);
+        if (nextImage === undefined) {
+            document.getElementById("surveyNextBtn").disabled = true;
+            console.log(`Reached end of list and cannot go forth`);
+        } 
+        else {
+            document.getElementById("surveyNextBtn").disabled = false;
+        }
+        
+        // previous image button
+        let prevImage = getAdjacentImage(false);
+        if (prevImage === undefined) {
+            document.getElementById("surveyPrevBtn").disabled = true;
+            console.log(`Reached start of list and cannot go back`);
+        } 
+        else {
+            document.getElementById("surveyPrevBtn").disabled = false;
+        }
+    }
     
+    /**
+     * Open adjacent (previous or next) image 
+     * @param {boolean} openNext If true, the next image is opened, otherwise the previous image is opened.
+     */
+    function openAdjacentImage(openNext=true) {
+        let adjacentImage = getAdjacentImage(openNext)
+        if (adjacentImage !== undefined) {
+            collabPicker.open(adjacentImage, false, false);
+        }
+    }
+    
+    /**
+     * Ensures that next/previous buttons are set upon page reload
+     */
+    window.onload = function() {
+        setNextPrevBtnAccess();
+    }
+
     return {
         resetSurveyForm,
         isEmpty,
@@ -168,6 +213,7 @@ const surveyHandler = (function (){
         setSaved,
         updateSurveyStatus,
         saveSurveyAnswer,
+        setNextPrevBtnAccess,
         openAdjacentImage,
     };
 })();
