@@ -523,6 +523,7 @@ const tmapp = (function() {
      *
      * @Roman - modified
      * Added if-else block at start which checks whether survey was saved.
+     * Added a check that activates/deactivates prev/next buttons
      */
     function openImage(imageName, callback, nochange, askAboutSaving=false) {
         
@@ -570,6 +571,8 @@ const tmapp = (function() {
             tmappUI.setImageName(_currentImage.name);
             _updateURLParams();
             _initOSD(callback);
+
+            surveyHandler.setNextPrevBtnAccess();
         }
     }
 

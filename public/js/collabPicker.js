@@ -268,7 +268,6 @@ const collabPicker = (function() {
      * @Roman - modified
      * Now always creates a new collab as we do not care about collaborations and 
      * this makes everything else easier. 
-     * Also checks whether to activate/deactivate the next/previous buttons
      *
      * Prompt the user to either start a new collaboration or select an
      * existing collaboration for a given image.
@@ -297,7 +296,6 @@ const collabPicker = (function() {
         }
         
         _createCollab();
-        surveyHandler.setNextPrevBtnAccess(); // needs to be called after _createCollab otherwise image name is undefined
     }
 
     /**
