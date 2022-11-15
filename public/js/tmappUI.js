@@ -229,10 +229,15 @@ const tmappUI = (function(){
         htmlHelper.buildClassSelectionButtons(container, 0);
     }
 
+    /**
+     * @Roman - modified function
+     * commented out line which sets the annotation tool to marker.
+     * This prevents marks being placed when clicking on a slide. 
+     */
     function _initToolSelectionButtons() {
         $("#tool_marker").addClass("active");
         overlayHandler.setActiveAnnotationOverlay("marker");
-        annotationTool.setTool("marker");
+        // annotationTool.setTool("marker");
         $("#tool_marker").click(() => {
             overlayHandler.setActiveAnnotationOverlay("marker");
             annotationTool.setTool("marker");
