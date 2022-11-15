@@ -57,12 +57,10 @@ function getSurveyStatus() {
     surveyStatus.nOfRemainingQuestions = nOfRemainingQuestions;
     surveyStatus.pctComplete = Math.floor(pctComplete);
 
-    console.log(surveyStatus);
     console.assert(nOfQuestions === nOfCompletedQuestions + nOfRemainingQuestions, 
                    `Total questions (${nOfQuestions}) does not equal the sum of ` +
                    `answered (${nOfCompletedQuestions}) and unanswered (${nOfRemainingQuestions}) questions.`);
     
-    console.log(surveyStatus);
     return surveyStatus;
 }
 
