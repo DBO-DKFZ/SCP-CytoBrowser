@@ -33,6 +33,7 @@
     "jsondiffpatch": "^0.4.1",
     "minimist": "^1.2.6",
     "open": "^8.4.0",
-    "sanitize-filename": "^1.6.3"
+    "sanitize-filename": "^1.6.3",
+    "shuffle-seed": "^1.1.6"
   }
 }
