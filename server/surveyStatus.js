@@ -64,12 +64,12 @@ function getSurveyStatus() {
     return surveyStatus;
 }
 
-module.exports = function(dir, dataDir) {
+module.exports = function(dir, dataDir, seed) {
     if (!dir || typeof dir !== "string") {
         throw new Error("A collab directory has to be specified.");
     }
     collabDir = dir;
-    availableImages = require("./availableImages")(dataDir);
+    availableImages = require("./availableImages")(dataDir, seed);
 
     return getSurveyStatus;
 }

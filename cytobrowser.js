@@ -16,6 +16,7 @@ const port = argv._[1] || 0; //zero = 'arbitrary unused port'
 const collabDir = argv.collab || argv.c || "./collab_storage";
 const metadataDir = argv.metadata || argv.m || "./metadata/json";
 const dataDir = argv.data || argv.d || "./data";
+const seed = argv.seed || argv.s || ""; // @Roman - added seed parameter
 if (argv.h || argv.help) {
     console.info(`Usage: node cytobrowser.js [--open-browser] hostname port ` +
     `[-c collab storage path = "./collab_storage"] ` +
@@ -27,9 +28,9 @@ if (argv.h || argv.help) {
 // Declare required modules
 const fs = require("fs");
 const express = require("express");
-const availableImages = require("./server/availableImages")(dataDir);
+const availableImages = require("./server/availableImages")(dataDir, seed); // @Roman - added module requirement
 const collaboration = require("./server/collaboration")(collabDir, metadataDir);
-const surveyStatus = require("./server/surveyStatus")(collabDir, dataDir); // @Roman - added module requirement
+const surveyStatus = require("./server/surveyStatus")(collabDir, dataDir, seed); // @Roman - added module requirement
 const open = require("open");
 
 // Initialize the server

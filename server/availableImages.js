@@ -12,9 +12,13 @@
 
 // Declare required modules
 const fs = require("fs");
+const shuffleSeed = require('shuffle-seed'); // @Roman - added module requirement
 
 // Directory where the data can be found
 let dataDir;
+
+// @Roman - added seed for shuffling image list
+let seedImages;
 
 // HttpDirectory where the data can be accessed
 const dataOutDir = "data"; // Must match Cytobrowser served directory
@@ -132,6 +136,9 @@ function handleDirError(err) {
 }
 
 /**
+ * @Roman - modified function
+ * added shuffling option for image list
+ *
  * Update the cached image information. This function stores information
  * about the existing images in availableImages, which can be retrieved
  * multiple times without having to call this function again.
@@ -147,13 +154,17 @@ function updateImages() {
         names = names.filter(name => name !== null);
         const uniqueNames = [... new Set(names)];
 
-        const images = [];
+        var images = [];
         uniqueNames.map(name => images.push({name: name}));
         images.map(image => {
             getZLevels(dir, image);
             getThumbnails(dir, image);
         });
-
+        
+        if (seedImages !== "") {
+            images = shuffleSeed.shuffle(images, seedImages);
+        }
+        
         availableImages = {images: images};
     });
 }
@@ -188,11 +199,16 @@ function getAvailableImages() {
     return availableImages;
 }
 
-module.exports = function(dir) {
+// @Roman - modified to include seed parameter
+module.exports = function(dir, seed) {
     if (!dir || typeof dir !== "string") {
         throw new Error("A data directory has to be specified.");
     }
+    if (seed === undefined) {
+        throw new Error("Random seed cannt be undefined. Needs to be an empty or normal string");
+    }
     dataDir = dir;
+    seedImages = seed;
     checkForDataUpdates();
     setInterval(checkForDataUpdates, 10000);
     return getAvailableImages;
