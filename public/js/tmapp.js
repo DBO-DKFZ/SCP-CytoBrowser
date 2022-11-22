@@ -32,7 +32,8 @@ const tmapp = (function() {
         sequenceMode: false, // true,
         preserveViewport: true,
         preserveOverlays: true,
-        preload: true
+        preload: true,
+        showRotationControl: true, // @Roman - add support for rotation 
     };
 
     let _currentImage,
